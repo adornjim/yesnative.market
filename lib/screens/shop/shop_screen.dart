@@ -31,10 +31,10 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
     final products = ref.watch(productsByCategoryProvider(_selectedCategory));
 
     return Scaffold(
-      backgroundColor: AppColors.warmBeige,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Our Products'),
-        backgroundColor: AppColors.warmBeige,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Column(
         children: [
@@ -59,16 +59,16 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                         setState(() => _selectedCategory = category['id']!);
                       }
                     },
-                    selectedColor: AppColors.primaryGreen,
-                    backgroundColor: AppColors.white,
+                    selectedColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     labelStyle: TextStyle(
-                      color: isSelected ? AppColors.white : AppColors.primaryGreen,
+                      color: isSelected ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.primary,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
-                        color: isSelected ? AppColors.primaryGreen : Colors.grey.shade300,
+                        color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade300,
                       ),
                     ),
                   ),
@@ -108,7 +108,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                     ),
                     itemCount: products.length,
                     itemBuilder: (context, index) {
-                      return ProductCard(product: products[index]);
+                      return ProductCard(product: products[index], index: index);
                     },
                   ),
           ),

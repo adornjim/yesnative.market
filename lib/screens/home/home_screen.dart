@@ -8,6 +8,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../providers/products_provider.dart';
 import '../../widgets/product_card.dart';
+import '../../widgets/home_hero_carousel.dart';
+import '../../widgets/app_logo.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -15,39 +17,39 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.warmBeige,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           // Announcement Bar
           SliverToBoxAdapter(
             child: Container(
-              color: AppColors.primaryGreen,
+              color: Theme.of(context).colorScheme.primary,
               padding: const EdgeInsets.symmetric(vertical: 8),
               alignment: Alignment.center,
-              child: const Text(
+              child: Text(
                 'Traditional Wellness for Modern Living • Clean Label Millet Nutrition',
-                style: TextStyle(color: AppColors.white, fontSize: 12),
+                style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 12),
               ),
             ),
           ),
           
           // AppBar
           SliverAppBar(
-            backgroundColor: AppColors.white,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             pinned: true,
-            title: const Text('YES NATIVE', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 2)),
+            title: AppLogo(size: 20, color: Theme.of(context).colorScheme.primary),
             centerTitle: true,
             actions: [
               IconButton(
                 icon: const Icon(Icons.search),
-                onPressed: () {},
+                onPressed: () => context.go('/search'),
               ),
             ],
           ),
           
           SliverList(
             delegate: SliverChildListDelegate([
-              _buildHeroSection(context),
+              const HomeHeroCarousel(),
               _buildFeaturedProducts(context, ref),
               _buildFinalCTA(context),
             ]),
@@ -57,61 +59,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.white, AppColors.warmBeige],
-        ),
-      ),
-      padding: AppSpacing.edgeInsetsLg,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Rooted in Tradition',
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: AppColors.accentGold,
-              letterSpacing: 2,
-            ),
-          ),
-          AppSpacing.gapVsm,
-          Text(
-            'Functional Superfoods Built for Modern Lifestyles',
-            style: Theme.of(context).textTheme.displaySmall,
-          ),
-          AppSpacing.gapVmd,
-          Text(
-            'Clean-label, millet-based nutrition designed to support your specific wellness goals—from weight management to daily energy.',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.grey[700],
-            ),
-          ),
-          AppSpacing.gapVlg,
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => context.go('/shop'),
-                  child: const Text('Shop Products'),
-                ),
-              ),
-              AppSpacing.gapHmd,
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.go('/wellness'),
-                  child: const Text('Explore Wellness'),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.gapVxl,
-        ],
-      ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, curve: Curves.easeOutBack),
-    );
-  }
+
 
   Widget _buildFeaturedProducts(BuildContext context, WidgetRef ref) {
     // Just grab the first 4 products for featured
@@ -148,8 +96,8 @@ class HomeScreen extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.only(top: 32),
       padding: const EdgeInsets.symmetric(vertical: 64, horizontal: 24),
-      decoration: const BoxDecoration(
-        color: AppColors.primaryGreen,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
       ),
       child: Column(
         children: [
@@ -157,20 +105,22 @@ class HomeScreen extends ConsumerWidget {
             'Bring Traditional Wellness Back Into Everyday Life',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.surface,
             ),
           ),
           AppSpacing.gapVlg,
           ElevatedButton(
             onPressed: () => context.go('/shop'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accentGold,
-              foregroundColor: AppColors.white,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              foregroundColor: Theme.of(context).colorScheme.surface,
             ),
-            child: const Text('Shop Now'),
+            child: Text('Shop Now'),
           ),
         ],
       ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
     );
   }
 }
+
+

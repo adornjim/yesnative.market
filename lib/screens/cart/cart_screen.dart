@@ -3,10 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:intl/intl.dart';
 
+import 'package:go_router/go_router.dart';
+
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../providers/cart_provider.dart';
 import '../../widgets/gradient_image_placeholder.dart';
+import '../../widgets/glass_card.dart';
+
+import 'package:flutter_animate/flutter_animate.dart';
 
 class CartScreen extends ConsumerWidget {
   const CartScreen({super.key});
@@ -19,10 +24,10 @@ class CartScreen extends ConsumerWidget {
     final formatCurrency = NumberFormat.currency(locale: 'en_IN', symbol: '₹', decimalDigits: 0);
 
     return Scaffold(
-      backgroundColor: AppColors.warmBeige,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Shopping Cart'),
-        backgroundColor: AppColors.warmBeige,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           if (cartItems.isNotEmpty)
             TextButton.icon(
@@ -64,11 +69,11 @@ class CartScreen extends ConsumerWidget {
                     height: 120,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: const LinearGradient(
-                        colors: [AppColors.mediumBeige, AppColors.lightTan],
+                      gradient: LinearGradient(
+                        colors: [Theme.of(context).colorScheme.surfaceContainerHighest, Theme.of(context).colorScheme.surfaceContainerHighest],
                       ),
                     ),
-                    child: const Icon(Icons.shopping_bag_outlined, size: 48, color: AppColors.primaryGreen),
+                    child: Icon(Icons.shopping_bag_outlined, size: 48, color: Theme.of(context).colorScheme.primary),
                   ),
                   AppSpacing.gapVlg,
                   Text('Your Cart is Empty', style: Theme.of(context).textTheme.headlineSmall),
@@ -96,14 +101,14 @@ class CartScreen extends ConsumerWidget {
                             color: AppColors.error,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Icon(Icons.delete_outline, color: AppColors.white),
+                          child: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.surface),
                         ),
                         onDismissed: (direction) {
                           ref.read(cartNotifierProvider.notifier).removeFromCart(item.product.id);
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: AppColors.white,
+                            color: Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
@@ -125,7 +130,7 @@ class CartScreen extends ConsumerWidget {
                                   child: Center(
                                     child: Text(
                                       item.product.name[0],
-                                      style: TextStyle(color: AppColors.primaryGreen.withOpacity(0.3), fontSize: 24, fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), fontSize: 24, fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -175,28 +180,15 @@ class CartScreen extends ConsumerWidget {
                             ],
                           ),
                         ),
-                      );
+                      ).animate().fadeIn(delay: (index * 100).ms, duration: 400.ms).slideX(begin: 0.1, curve: Curves.easeOutQuad);
                     },
                   ),
                 ),
                 
                 // Order Summary
-                Container(
+                GlassCard(
                   padding: AppSpacing.edgeInsetsLg,
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, -4),
-                      ),
-                    ],
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24),
-                    ),
-                  ),
+                  borderRadius: 24,
                   child: SafeArea(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -213,7 +205,7 @@ class CartScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Shipping', style: TextStyle(color: Colors.grey)),
-                            const Text('FREE', style: TextStyle(color: AppColors.primaryGreen, fontWeight: FontWeight.bold)),
+                            Text('FREE', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold)),
                           ],
                         ),
                         const Divider(height: 24),
@@ -223,17 +215,13 @@ class CartScreen extends ConsumerWidget {
                             Text('Total ($count items)', style: Theme.of(context).textTheme.titleLarge),
                             Text(
                               formatCurrency.format(total),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.primaryGreen),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
                             ),
                           ],
                         ),
                         AppSpacing.gapVmd,
                         ElevatedButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Checkout flow not implemented yet.')),
-                            );
-                          },
+                          onPressed: cartItems.isEmpty ? null : () => context.go('/checkout'),
                           style: ElevatedButton.styleFrom(
                             padding: AppSpacing.edgeInsetsVmd,
                           ),
@@ -248,3 +236,6 @@ class CartScreen extends ConsumerWidget {
     );
   }
 }
+
+
+

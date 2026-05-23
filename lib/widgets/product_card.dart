@@ -7,35 +7,28 @@ import '../core/theme/app_spacing.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import 'gradient_image_placeholder.dart';
+import 'glass_card.dart';
 
 import 'package:flutter_animate/flutter_animate.dart';
 
 class ProductCard extends ConsumerWidget {
   final Product product;
   final VoidCallback? onViewDetails;
+  final int index;
 
   const ProductCard({
     super.key,
     required this.product,
     this.onViewDetails,
+    this.index = 0,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formatCurrency = NumberFormat.currency(locale: 'en_IN', symbol: '₹', decimalDigits: 0);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return GlassCard(
+      padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -76,7 +69,7 @@ class ProductCard extends ConsumerWidget {
                           Text(
                             product.category.toUpperCase().replaceAll('-', ' '),
                             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.accentGold,
+                              color: Theme.of(context).colorScheme.secondary,
                               letterSpacing: 1.2,
                             ),
                             maxLines: 1,
@@ -96,7 +89,7 @@ class ProductCard extends ConsumerWidget {
                           // Rating
                           Row(
                             children: [
-                              const Icon(Icons.star, size: 14, color: AppColors.accentGold),
+                              Icon(Icons.star, size: 14, color: Theme.of(context).colorScheme.secondary),
                               AppSpacing.gapHsm,
                               Text(
                                 '${product.rating} (${product.reviews})',
@@ -114,7 +107,7 @@ class ProductCard extends ConsumerWidget {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(Icons.check_circle, size: 14, color: AppColors.primaryGreen),
+                                Icon(Icons.check_circle, size: 14, color: Theme.of(context).colorScheme.primary),
                                 AppSpacing.gapHsm,
                                 Expanded(
                                   child: Text(
@@ -141,7 +134,7 @@ class ProductCard extends ConsumerWidget {
                       Text(
                         formatCurrency.format(product.price),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.primaryGreen,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       IconButton(
@@ -150,15 +143,15 @@ class ProductCard extends ConsumerWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('${product.name} added to cart'),
-                              backgroundColor: AppColors.primaryGreen,
+                              backgroundColor: Theme.of(context).colorScheme.primary,
                               duration: const Duration(seconds: 2),
                               behavior: SnackBarBehavior.floating,
                             ),
                           );
                         },
-                        icon: const Icon(Icons.shopping_cart, color: AppColors.white, size: 18),
+                        icon: Icon(Icons.shopping_cart, color: Theme.of(context).colorScheme.surface, size: 18),
                         style: IconButton.styleFrom(
-                          backgroundColor: AppColors.primaryGreen,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                           padding: const EdgeInsets.all(8),
                           minimumSize: const Size(36, 36),
                         ),
@@ -171,7 +164,7 @@ class ProductCard extends ConsumerWidget {
           ),
         ],
       ),
-    ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1, curve: Curves.easeOutQuad);
+    ).animate().fadeIn(delay: (index * 50).ms, duration: 400.ms).slideY(begin: 0.1, curve: Curves.easeOutQuad);
   }
 
   Widget _buildPlaceholder(BuildContext context) {
@@ -180,10 +173,12 @@ class ProductCard extends ConsumerWidget {
         child: Text(
           product.name[0],
           style: Theme.of(context).textTheme.displaySmall?.copyWith(
-            color: AppColors.primaryGreen.withOpacity(0.3),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
           ),
         ),
       ),
     );
   }
 }
+
+

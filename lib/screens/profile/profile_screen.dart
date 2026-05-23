@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../providers/theme_provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.warmBeige,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('My Account'),
-        backgroundColor: AppColors.warmBeige,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
         padding: AppSpacing.edgeInsetsMd,
@@ -24,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
             Container(
               padding: AppSpacing.edgeInsetsLg,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -36,10 +37,10 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 40,
-                    backgroundColor: AppColors.mediumBeige,
-                    child: Icon(Icons.person_outline, size: 40, color: AppColors.primaryGreen),
+                    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    child: Icon(Icons.person_outline, size: 40, color: Theme.of(context).colorScheme.primary),
                   ),
                   AppSpacing.gapVmd,
                   Text('Welcome to Yes Native', style: Theme.of(context).textTheme.titleLarge),
@@ -61,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
             
             // Menu Items
             Material(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               clipBehavior: Clip.antiAlias,
               child: Column(
@@ -76,10 +77,28 @@ class ProfileScreen extends StatelessWidget {
             ),
             
             AppSpacing.gapVlg,
+
+            // Settings
+            Material(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              clipBehavior: Clip.antiAlias,
+              child: SwitchListTile(
+                title: const Text('Dark Mode', style: TextStyle(fontWeight: FontWeight.w500)),
+                secondary: Icon(Icons.dark_mode_outlined, color: Theme.of(context).colorScheme.primary),
+                value: ref.watch(themeProvider) == ThemeMode.dark,
+                activeColor: Theme.of(context).colorScheme.secondary,
+                onChanged: (val) {
+                  ref.read(themeProvider.notifier).toggleTheme();
+                },
+              ),
+            ),
+            
+            AppSpacing.gapVlg,
             
             // Company Info
             Material(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               clipBehavior: Clip.antiAlias,
               child: Column(
@@ -104,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildMenuItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primaryGreen),
+      leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
       trailing: const Icon(Icons.chevron_right, size: 18),
       onTap: onTap,
@@ -113,10 +132,12 @@ class ProfileScreen extends StatelessWidget {
 
   void _showLoginToast(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text('Please login to access this feature.'),
-        backgroundColor: AppColors.primaryGreen,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
 }
+
+

@@ -11,12 +11,16 @@ import '../../screens/about/about_screen.dart';
 import '../../screens/contact/contact_screen.dart';
 import '../../screens/login/login_screen.dart';
 import '../../screens/not_found/not_found_screen.dart';
+import '../../screens/splash/splash_screen.dart';
+import '../../screens/onboarding/onboarding_screen.dart';
+import '../../screens/search/search_screen.dart';
+import '../../screens/checkout/checkout_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/splash',
   errorBuilder: (context, state) => const NotFoundScreen(),
   routes: [
     StatefulShellRoute.indexedStack(
@@ -69,17 +73,61 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/about',
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const AboutScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const AboutScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
+      ),
     ),
     GoRoute(
       path: '/contact',
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const ContactScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const ContactScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
+      ),
     ),
     GoRoute(
       path: '/login',
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const LoginScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const LoginScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
+      ),
+    ),
+    GoRoute(
+      path: '/splash',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: '/onboarding',
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const OnboardingScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
+      ),
+    ),
+    GoRoute(
+      path: '/search',
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const SearchScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
+      ),
+    ),
+    GoRoute(
+      path: '/checkout',
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const CheckoutScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
+      ),
     ),
   ],
 );

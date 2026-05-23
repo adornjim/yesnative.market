@@ -10,10 +10,10 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.warmBeige,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('About Yes Native'),
-        backgroundColor: AppColors.warmBeige,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -22,10 +22,10 @@ class AboutScreen extends StatelessWidget {
             // Hero
             Container(
               padding: AppSpacing.edgeInsetsLg,
-              color: AppColors.primaryGreen,
+              color: Theme.of(context).colorScheme.primary,
               child: Text(
                 'Our Story',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: AppColors.white),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Theme.of(context).colorScheme.surface),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -48,7 +48,7 @@ class AboutScreen extends StatelessWidget {
             
             // Values Grid
             Container(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.surface,
               padding: AppSpacing.edgeInsetsLg,
               child: Column(
                 children: [
@@ -80,13 +80,13 @@ class AboutScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.edgeInsetsMd,
       decoration: BoxDecoration(
-        color: AppColors.warmBeige,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: AppColors.primaryGreen, size: 32),
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 32),
           AppSpacing.gapVmd,
           Text(title, style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
         ],
@@ -94,3 +94,4 @@ class AboutScreen extends StatelessWidget {
     );
   }
 }
+

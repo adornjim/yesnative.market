@@ -22,13 +22,13 @@ class GradientImagePlaceholder extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         borderRadius: borderRadius ?? BorderRadius.circular(16),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.warmBeige,
-            AppColors.mediumBeige,
-            AppColors.lightTan,
+            Theme.of(context).scaffoldBackgroundColor,
+            Theme.of(context).colorScheme.surfaceContainerHighest,
+            Theme.of(context).colorScheme.surfaceContainerHighest,
           ],
         ),
       ),
@@ -36,3 +36,5 @@ class GradientImagePlaceholder extends StatelessWidget {
     );
   }
 }
+
+

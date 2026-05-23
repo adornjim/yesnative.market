@@ -1,87 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
 
 class AppTypography {
   AppTypography._();
 
   static TextTheme get textTheme {
-    return GoogleFonts.outfitTextTheme().copyWith(
-      displayLarge: GoogleFonts.outfit(
-        fontSize: 57,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryGreen,
-      ),
-      displayMedium: GoogleFonts.outfit(
-        fontSize: 45,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryGreen,
-      ),
-      displaySmall: GoogleFonts.outfit(
-        fontSize: 36,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryGreen,
-      ),
-      headlineLarge: GoogleFonts.outfit(
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryGreen,
-      ),
-      headlineMedium: GoogleFonts.outfit(
-        fontSize: 28,
-        fontWeight: FontWeight.w600,
-        color: AppColors.primaryGreen,
-      ),
-      headlineSmall: GoogleFonts.outfit(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        color: AppColors.primaryGreen,
-      ),
-      titleLarge: GoogleFonts.outfit(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-        color: AppColors.primaryGreen,
-      ),
-      titleMedium: GoogleFonts.outfit(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: AppColors.primaryGreen,
-      ),
-      titleSmall: GoogleFonts.outfit(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: AppColors.primaryGreen,
-      ),
-      bodyLarge: GoogleFonts.outfit(
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
-        color: AppColors.black,
-      ),
-      bodyMedium: GoogleFonts.outfit(
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
-        color: AppColors.black,
-      ),
-      bodySmall: GoogleFonts.outfit(
-        fontSize: 12,
-        fontWeight: FontWeight.normal,
-        color: AppColors.black,
-      ),
-      labelLarge: GoogleFonts.outfit(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.primaryGreen,
-      ),
-      labelMedium: GoogleFonts.outfit(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-        color: AppColors.primaryGreen,
-      ),
-      labelSmall: GoogleFonts.outfit(
-        fontSize: 11,
-        fontWeight: FontWeight.w500,
-        color: AppColors.primaryGreen,
-      ),
+    // Body font: Outfit
+    final bodyFont = GoogleFonts.outfitTextTheme();
+    
+    // Heading font: Playfair Display
+    final displayLarge = GoogleFonts.playfairDisplay(fontSize: 57, fontWeight: FontWeight.bold);
+    final displayMedium = GoogleFonts.playfairDisplay(fontSize: 45, fontWeight: FontWeight.bold);
+    final displaySmall = GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold);
+    final headlineLarge = GoogleFonts.playfairDisplay(fontSize: 32, fontWeight: FontWeight.bold);
+    final headlineMedium = GoogleFonts.playfairDisplay(fontSize: 28, fontWeight: FontWeight.w600);
+    final headlineSmall = GoogleFonts.playfairDisplay(fontSize: 24, fontWeight: FontWeight.w600);
+    
+    // Subtitles also use Playfair for a touch of elegance
+    final titleLarge = GoogleFonts.playfairDisplay(fontSize: 22, fontWeight: FontWeight.w600);
+    
+    // Everything else uses Outfit
+    return bodyFont.copyWith(
+      displayLarge: displayLarge,
+      displayMedium: displayMedium,
+      displaySmall: displaySmall,
+      headlineLarge: headlineLarge,
+      headlineMedium: headlineMedium,
+      headlineSmall: headlineSmall,
+      titleLarge: titleLarge,
+      // Outfit overrides for body
+      titleMedium: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w600),
+      titleSmall: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w500),
+      bodyLarge: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.normal),
+      bodyMedium: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.normal),
+      bodySmall: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.normal),
+      labelLarge: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 1.2),
+      labelMedium: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 1.2),
+      labelSmall: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.w500, letterSpacing: 1.2),
     );
   }
 }

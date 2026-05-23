@@ -12,10 +12,10 @@ class WellnessScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.warmBeige,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Wellness Goals'),
-        backgroundColor: AppColors.warmBeige,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -24,14 +24,14 @@ class WellnessScreen extends ConsumerWidget {
             Container(
               width: double.infinity,
               padding: AppSpacing.edgeInsetsLg,
-              decoration: const BoxDecoration(
-                color: AppColors.primaryGreen,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
               ),
               child: Column(
                 children: [
                   Text(
                     'Find Your Perfect Wellness Solution',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.white),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.surface),
                     textAlign: TextAlign.center,
                   ),
                   AppSpacing.gapVmd,
@@ -76,7 +76,7 @@ class WellnessScreen extends ConsumerWidget {
       child: Container(
         padding: AppSpacing.edgeInsetsMd,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -92,10 +92,10 @@ class WellnessScreen extends ConsumerWidget {
             Container(
               padding: AppSpacing.edgeInsetsSm,
               decoration: BoxDecoration(
-                color: AppColors.warmBeige,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: AppColors.primaryGreen, size: 28),
+              child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
             ),
             AppSpacing.gapVmd,
             Text(
@@ -106,7 +106,7 @@ class WellnessScreen extends ConsumerWidget {
             AppSpacing.gapVsm,
             Text(
               subtitle,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(color: AppColors.accentGold),
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
           ],
         ),
@@ -114,3 +114,5 @@ class WellnessScreen extends ConsumerWidget {
     );
   }
 }
+
+

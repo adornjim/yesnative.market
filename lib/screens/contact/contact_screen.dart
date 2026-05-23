@@ -11,10 +11,10 @@ class ContactScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.warmBeige,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Contact Us'),
-        backgroundColor: AppColors.warmBeige,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
         padding: AppSpacing.edgeInsetsLg,
@@ -36,7 +36,7 @@ class ContactScreen extends StatelessWidget {
                     Container(
                       padding: AppSpacing.edgeInsetsSm,
                       decoration: const BoxDecoration(color: AppColors.whatsappGreen, shape: BoxShape.circle),
-                      child: const Icon(Icons.chat_bubble_outline, color: AppColors.white),
+                      child: Icon(Icons.chat_bubble_outline, color: Theme.of(context).colorScheme.surface),
                     ),
                     AppSpacing.gapHmd,
                     const Expanded(
@@ -62,7 +62,7 @@ class ContactScreen extends StatelessWidget {
             Container(
               padding: AppSpacing.edgeInsetsLg,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -100,3 +100,5 @@ class ContactScreen extends StatelessWidget {
     );
   }
 }
+
+
