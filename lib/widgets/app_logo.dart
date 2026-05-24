@@ -14,11 +14,14 @@ class AppLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final logoColor = color ?? Theme.of(context).colorScheme.primary;
 
-    return Image.asset(
-      'assets/images/logo.png',
-      height: size * 1.8,
-      fit: BoxFit.contain,
-      color: logoColor,
+    return Hero(
+      tag: 'app_logo',
+      child: Image.asset(
+        'assets/images/logo.png',
+        height: size * 1.8,
+        fit: BoxFit.contain,
+        color: logoColor,
+      ),
     );
   }
 }

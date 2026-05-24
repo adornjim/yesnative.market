@@ -168,17 +168,19 @@ class ProductCard extends ConsumerWidget {
   }
 
   Widget _buildPlaceholder(BuildContext context) {
+    if (product.imageUrl != null) {
+      return Image.asset(
+        product.imageUrl!,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
+    
     return GradientImagePlaceholder(
       child: Center(
-        child: Text(
-          product.name[0],
-          style: Theme.of(context).textTheme.displaySmall?.copyWith(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-          ),
-        ),
+        child: Icon(Icons.shopping_bag_outlined, size: 48, color: Theme.of(context).colorScheme.primary.withOpacity(0.5)),
       ),
     );
   }
 }
-
-

@@ -10,7 +10,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.8,
     reviews: 124,
     benefits: ['Low Glycemic Index', 'High in Dietary Fiber', 'Sustained Energy Release'],
-    imageUrl: 'https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_1.jpg',
   ),
   const Product(
     id: 2,
@@ -20,7 +20,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.9,
     reviews: 198,
     benefits: ['Rich in Antioxidants', 'Kid-Friendly Taste', 'Immunity Boosting'],
-    imageUrl: 'https://images.unsplash.com/photo-1582588147551-7893a74313dc?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_4.jpg',
   ),
   const Product(
     id: 3,
@@ -30,7 +30,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.7,
     reviews: 87,
     benefits: ['Natural Sweetener', 'Rich in Vitamin E', 'Brain Health Support'],
-    imageUrl: 'https://images.unsplash.com/photo-1612080880345-09e4cb9c8c9a?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_6.jpg',
   ),
   const Product(
     id: 4,
@@ -40,7 +40,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.8,
     reviews: 156,
     benefits: ['High Calcium Content', 'Easy Digestion', 'Growth & Development'],
-    imageUrl: 'https://images.unsplash.com/photo-1546554137-f86b9593a222?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_7.jpg',
   ),
   const Product(
     id: 5,
@@ -50,7 +50,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.6,
     reviews: 92,
     benefits: ['Pre & Post Workout', 'No Caffeine Jitters', 'Complex Carbohydrates'],
-    imageUrl: 'https://images.unsplash.com/photo-1546548970-71785318a30b?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_1.jpg',
   ),
   const Product(
     id: 6,
@@ -60,7 +60,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.9,
     reviews: 143,
     benefits: ['Hormonal Balance', 'Bone Health Support', 'Iron Rich Formulation'],
-    imageUrl: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_4.jpg',
   ),
   const Product(
     id: 7,
@@ -70,7 +70,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.7,
     reviews: 76,
     benefits: ['Blood Sugar Management', 'Zero Added Sugar', 'Slow Release Carbs'],
-    imageUrl: 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_6.jpg',
   ),
   const Product(
     id: 8,
@@ -80,7 +80,7 @@ final List<Product> _hardcodedProducts = [
     rating: 4.8,
     reviews: 134,
     benefits: ['Traditional Herbs Blend', 'Seasonal Protection', 'Respiratory Health'],
-    imageUrl: 'https://images.unsplash.com/photo-1610486022068-15093df9fb9d?q=80&w=600&auto=format&fit=crop',
+    imageUrl: 'assets/images/prod_7.jpg',
   ),
 ];
 

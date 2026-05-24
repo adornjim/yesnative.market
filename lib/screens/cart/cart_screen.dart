@@ -125,15 +125,20 @@ class CartScreen extends ConsumerWidget {
                               SizedBox(
                                 width: 80,
                                 height: 80,
-                                child: GradientImagePlaceholder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Center(
-                                    child: Text(
-                                      item.product.name[0],
-                                      style: TextStyle(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), fontSize: 24, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
+                                child: item.product.imageUrl != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.asset(item.product.imageUrl!, fit: BoxFit.cover),
+                                      )
+                                    : GradientImagePlaceholder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Center(
+                                          child: Text(
+                                            item.product.name[0],
+                                            style: TextStyle(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), fontSize: 24, fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
                               ),
                               AppSpacing.gapHmd,
                               // Details

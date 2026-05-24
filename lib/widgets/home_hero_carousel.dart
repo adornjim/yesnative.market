@@ -18,17 +18,17 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
 
   final List<Map<String, String>> _slides = [
     {
-      'image': 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1000&auto=format&fit=crop',
+      'image': 'assets/images/hero_1.jpg',
       'label': 'Rooted in Tradition',
       'title': 'Functional Superfoods Built for Modern Lifestyles',
     },
     {
-      'image': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000&auto=format&fit=crop',
+      'image': 'assets/images/hero_2.jpg',
       'label': 'Clean Label Nutrition',
       'title': '100% natural ingredients. No preservatives.',
     },
     {
-      'image': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1000&auto=format&fit=crop',
+      'image': 'assets/images/hero_3.jpg',
       'label': 'Your Wellness Journey',
       'title': 'Millet-based nutrition designed for everyday energy.',
     },
@@ -71,7 +71,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
               return Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
+                  Image.asset(
                     slide['image']!,
                     fit: BoxFit.cover,
                   ),

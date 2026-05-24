@@ -1,83 +1,102 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
-
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../providers/products_provider.dart';
+import '../../widgets/product_card.dart';
+import '../../widgets/daily_tip_card.dart';
+import '../../widgets/wellness_streak.dart';
+import '../../widgets/wellness_quiz.dart';
 
-class WellnessScreen extends ConsumerWidget {
+class WellnessScreen extends ConsumerStatefulWidget {
   const WellnessScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WellnessScreen> createState() => _WellnessScreenState();
+}
+
+class _WellnessScreenState extends ConsumerState<WellnessScreen> {
+  String? _selectedCategory;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Wellness Goals'),
+        title: const Text('Wellness Hub'),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
+        padding: AppSpacing.edgeInsetsLg,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Hero
-            Container(
-              width: double.infinity,
-              padding: AppSpacing.edgeInsetsLg,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'Find Your Perfect Wellness Solution',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.surface),
-                    textAlign: TextAlign.center,
-                  ),
-                  AppSpacing.gapVmd,
-                  const Text(
-                    'Discover targeted nutrition blends formulated to support your specific health objectives.',
-                    style: TextStyle(color: Colors.white70),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
+            const WellnessStreak(),
+            AppSpacing.gapVlg,
+            const DailyTipCard(),
+            AppSpacing.gapVlg,
+            const WellnessQuiz(),
+            AppSpacing.gapVlg,
+            
+            Text(
+              "Explore by Category",
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ).animate().fadeIn(),
+            AppSpacing.gapVmd,
             
             // Categories Grid
-            Padding(
-              padding: AppSpacing.edgeInsetsLg,
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.85,
-                children: [
-                  _buildCategoryCard(context, 'Weight Management', '2 Products', Icons.monitor_weight_outlined),
-                  _buildCategoryCard(context, 'Daily Energy', '1 Product', Icons.bolt),
-                  _buildCategoryCard(context, 'Kids Nutrition', '1 Product', Icons.child_care),
-                  _buildCategoryCard(context, 'Women\'s Wellness', '1 Product', Icons.auto_awesome),
-                  _buildCategoryCard(context, 'Family Health', '2 Products', Icons.people_outline),
-                  _buildCategoryCard(context, 'Natural Nourishment', '1 Product', Icons.eco_outlined),
-                ],
-              ),
-            ),
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.1,
+              children: [
+                _buildCategoryCard('weight-management', 'Weight Management', '2 Products', Icons.monitor_weight_outlined),
+                _buildCategoryCard('daily-energy', 'Daily Energy', '1 Product', Icons.bolt),
+                _buildCategoryCard('kids-nutrition', 'Kids Nutrition', '1 Product', Icons.child_care),
+                _buildCategoryCard('womens-wellness', 'Women\'s Wellness', '1 Product', Icons.auto_awesome),
+                _buildCategoryCard('family-health', 'Family Health', '2 Products', Icons.people_outline),
+                _buildCategoryCard('natural-nourishment', 'Natural Nourishment', '1 Product', Icons.eco_outlined),
+              ],
+            ).animate().fadeIn().slideY(begin: 0.1),
+            
+            if (_selectedCategory != null) ...[
+              AppSpacing.gapVxl,
+              Text(
+                "Products for you",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ).animate().fadeIn(),
+              AppSpacing.gapVmd,
+              _buildFilteredProducts(),
+            ]
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCategoryCard(BuildContext context, String title, String subtitle, IconData icon) {
+  Widget _buildCategoryCard(String id, String title, String subtitle, IconData icon) {
+    final isSelected = _selectedCategory == id;
     return InkWell(
-      onTap: () => context.go('/shop'),
-      child: Container(
+      onTap: () {
+        setState(() {
+          _selectedCategory = isSelected ? null : id;
+        });
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
         padding: AppSpacing.edgeInsetsMd,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: isSelected ? Theme.of(context).colorScheme.primary.withOpacity(0.1) : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+             color: isSelected ? Theme.of(context).colorScheme.primary : Colors.transparent,
+             width: 2,
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -92,10 +111,10 @@ class WellnessScreen extends ConsumerWidget {
             Container(
               padding: AppSpacing.edgeInsetsSm,
               decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).scaffoldBackgroundColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
+              child: Icon(icon, color: isSelected ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.primary, size: 28),
             ),
             AppSpacing.gapVmd,
             Text(
@@ -103,16 +122,32 @@ class WellnessScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleSmall,
               textAlign: TextAlign.center,
             ),
-            AppSpacing.gapVsm,
-            Text(
-              subtitle,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Theme.of(context).colorScheme.secondary),
-            ),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildFilteredProducts() {
+    final products = ref.watch(productsByCategoryProvider(_selectedCategory ?? 'all'));
+    
+    if (products.isEmpty) {
+      return const Center(child: Text("No products found for this category."));
+    }
+
+    return SizedBox(
+      height: 300, 
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: products.length,
+        separatorBuilder: (context, index) => AppSpacing.gapHmd,
+        itemBuilder: (context, index) {
+          return SizedBox(
+            width: 200, 
+            child: ProductCard(product: products[index], index: index),
+          );
+        },
+      ),
+    ).animate().fadeIn().slideX(begin: 0.1);
+  }
 }
-
-
