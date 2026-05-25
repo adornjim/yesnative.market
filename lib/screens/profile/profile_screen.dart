@@ -102,7 +102,7 @@ class ProfileScreen extends ConsumerWidget {
                   const Divider(height: 1),
                   _buildMenuItem(context, Icons.favorite_border, 'Wishlist', () => context.push('/wishlist')),
                   const Divider(height: 1),
-                  _buildMenuItem(context, Icons.location_on_outlined, 'Saved Addresses', () => _showLoginToast(context)),
+                  _buildMenuItem(context, Icons.location_on_outlined, 'Saved Addresses', () => context.push('/addresses')),
                 ],
               ),
             ),

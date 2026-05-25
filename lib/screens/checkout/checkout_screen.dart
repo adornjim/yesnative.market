@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../providers/cart_provider.dart';
+import '../../providers/address_provider.dart';
+import '../../models/address.dart';
+import '../address/add_address_sheet.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
@@ -19,10 +22,43 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   bool _isSuccess = false;
   String _selectedPaymentMethod = 'upi';
   String? _selectedUpiApp = 'gpay';
+  
+  final _nameController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _pincodeController = TextEditingController();
+  bool _hasInitializedDefaultAddress = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _addressController.dispose();
+    _cityController.dispose();
+    _pincodeController.dispose();
+    super.dispose();
+  }
+
+  void _fillAddress(Address address) {
+    setState(() {
+      _nameController.text = address.fullName;
+      _addressController.text = '${address.addressLine1} ${address.addressLine2}'.trim();
+      _cityController.text = address.city;
+      _pincodeController.text = address.pincode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     if (_isSuccess) return _buildSuccessScreen();
+    
+    final addresses = ref.watch(addressProvider);
+    if (!_hasInitializedDefaultAddress && addresses.isNotEmpty) {
+      final defaultAddress = addresses.firstWhere((a) => a.isDefault, orElse: () => addresses.first);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fillAddress(defaultAddress);
+        setState(() => _hasInitializedDefaultAddress = true);
+      });
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -96,22 +132,114 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   }
 
   Widget _buildShippingForm() {
+    final addresses = ref.watch(addressProvider);
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (addresses.isNotEmpty) ...[
+          const Text('Select a Saved Address', style: TextStyle(fontWeight: FontWeight.bold)),
+          AppSpacing.gapVsm,
+          SizedBox(
+            height: 120,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: addresses.length + 1,
+              separatorBuilder: (context, index) => AppSpacing.gapHmd,
+              itemBuilder: (context, index) {
+                if (index == addresses.length) {
+                  return GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                        ),
+                        builder: (context) => const AddAddressSheet(),
+                      );
+                    },
+                    child: Container(
+                      width: 140,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade300, style: BorderStyle.solid),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add_circle_outline, color: Theme.of(context).colorScheme.primary),
+                          AppSpacing.gapVsm,
+                          Text('Add New', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                
+                final address = addresses[index];
+                return GestureDetector(
+                  onTap: () => _fillAddress(address),
+                  child: Container(
+                    width: 220,
+                    padding: AppSpacing.edgeInsetsMd,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 4, offset: const Offset(0, 2)),
+                      ]
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              address.type == 'Home' ? Icons.home : (address.type == 'Work' ? Icons.work : Icons.location_on),
+                              size: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(address.type, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+                          ],
+                        ),
+                        AppSpacing.gapVsm,
+                        Text(address.fullName, style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Text(address.addressLine1, style: TextStyle(color: Colors.grey[600], fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Text('${address.city}, ${address.pincode}', style: TextStyle(color: Colors.grey[600], fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          AppSpacing.gapVlg,
+          const Text('Or Enter Manually', style: TextStyle(fontWeight: FontWeight.bold)),
+          AppSpacing.gapVmd,
+        ],
         TextFormField(
+          controller: _nameController,
           decoration: const InputDecoration(labelText: 'Full Name', border: OutlineInputBorder()),
         ),
         AppSpacing.gapVmd,
         TextFormField(
+          controller: _addressController,
           decoration: const InputDecoration(labelText: 'Address', border: OutlineInputBorder()),
           maxLines: 3,
         ),
         AppSpacing.gapVmd,
         TextFormField(
+          controller: _cityController,
           decoration: const InputDecoration(labelText: 'City', border: OutlineInputBorder()),
         ),
         AppSpacing.gapVmd,
         TextFormField(
+          controller: _pincodeController,
           decoration: const InputDecoration(labelText: 'Pincode', border: OutlineInputBorder()),
           keyboardType: TextInputType.number,
         ),
