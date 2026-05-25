@@ -16,6 +16,7 @@ import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/search/search_screen.dart';
 import '../../screens/checkout/checkout_screen.dart';
 import '../../screens/wishlist/wishlist_screen.dart';
+import '../../screens/product/product_details_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -180,6 +181,24 @@ final appRouter = GoRouter(
           return SlideTransition(position: animation.drive(tween), child: child);
         },
       ),
+    ),
+    GoRoute(
+      path: '/product/:id',
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: ProductDetailsScreen(productId: id),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0); // Slide up for product details
+            const end = Offset.zero;
+            const curve = Curves.easeOutQuart;
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            return SlideTransition(position: animation.drive(tween), child: child);
+          },
+        );
+      },
     ),
   ],
 );

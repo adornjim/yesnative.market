@@ -6,7 +6,9 @@ class Product {
   final double rating;
   final int reviews;
   final List<String> benefits;
+  final String description;
   final String? imageUrl;
+  final List<String>? additionalImages;
 
   const Product({
     required this.id,
@@ -16,6 +18,8 @@ class Product {
     required this.rating,
     required this.reviews,
     required this.benefits,
+    this.description = '',
     this.imageUrl,
+    this.additionalImages,
   });
 }
