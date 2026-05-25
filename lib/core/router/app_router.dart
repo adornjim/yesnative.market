@@ -40,7 +40,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/shop',
-              builder: (context, state) => const ShopScreen(),
+              builder: (context, state) => const ShopScreen(selectedCategory: 'all'),
             ),
           ],
         ),

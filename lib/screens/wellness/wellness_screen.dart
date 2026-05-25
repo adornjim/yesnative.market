@@ -3,11 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../core/theme/app_spacing.dart';
-import '../../providers/products_provider.dart';
-import '../../widgets/product_card.dart';
 import '../../widgets/daily_tip_card.dart';
 import '../../widgets/wellness_streak.dart';
 import '../../widgets/wellness_quiz.dart';
+import '../shop/shop_screen.dart';
 
 class WellnessScreen extends ConsumerStatefulWidget {
   const WellnessScreen({super.key});
@@ -17,7 +16,6 @@ class WellnessScreen extends ConsumerStatefulWidget {
 }
 
 class _WellnessScreenState extends ConsumerState<WellnessScreen> {
-  String? _selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +52,7 @@ class _WellnessScreenState extends ConsumerState<WellnessScreen> {
               mainAxisSpacing: 16,
               childAspectRatio: 1.1,
               children: [
-                _buildCategoryCard('weight-management', 'Weight Management', '2 Products', Icons.monitor_weight_outlined),
+                _buildWeightManagementCard(),
                 _buildCategoryCard('daily-energy', 'Daily Energy', '1 Product', Icons.bolt),
                 _buildCategoryCard('kids-nutrition', 'Kids Nutrition', '1 Product', Icons.child_care),
                 _buildCategoryCard('womens-wellness', 'Women\'s Wellness', '1 Product', Icons.auto_awesome),
@@ -63,15 +61,49 @@ class _WellnessScreenState extends ConsumerState<WellnessScreen> {
               ],
             ).animate().fadeIn().slideY(begin: 0.1),
             
-            if (_selectedCategory != null) ...[
-              AppSpacing.gapVxl,
-              Text(
-                "Products for you",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-              ).animate().fadeIn(),
-              AppSpacing.gapVmd,
-              _buildFilteredProducts(),
-            ]
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWeightManagementCard() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ShopScreen(selectedCategory: 'weight-management'),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.monitor_weight_outlined,
+                size: 40,
+                color: Color(0xFF234F2A)),
+            SizedBox(height: 20),
+            Text(
+              "Weight Management",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
@@ -79,27 +111,24 @@ class _WellnessScreenState extends ConsumerState<WellnessScreen> {
   }
 
   Widget _buildCategoryCard(String id, String title, String subtitle, IconData icon) {
-    final isSelected = _selectedCategory == id;
     return InkWell(
       onTap: () {
-        setState(() {
-          _selectedCategory = isSelected ? null : id;
-        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ShopScreen(selectedCategory: id),
+          ),
+        );
       },
       borderRadius: BorderRadius.circular(16),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+      child: Container(
         padding: AppSpacing.edgeInsetsMd,
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).colorScheme.primary.withOpacity(0.1) : Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-             color: isSelected ? Theme.of(context).colorScheme.primary : Colors.transparent,
-             width: 2,
-          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -111,10 +140,10 @@ class _WellnessScreenState extends ConsumerState<WellnessScreen> {
             Container(
               padding: AppSpacing.edgeInsetsSm,
               decoration: BoxDecoration(
-                color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).scaffoldBackgroundColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: isSelected ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.primary, size: 28),
+              child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
             ),
             AppSpacing.gapVmd,
             Text(
@@ -126,28 +155,5 @@ class _WellnessScreenState extends ConsumerState<WellnessScreen> {
         ),
       ),
     );
-  }
-
-  Widget _buildFilteredProducts() {
-    final products = ref.watch(productsByCategoryProvider(_selectedCategory ?? 'all'));
-    
-    if (products.isEmpty) {
-      return const Center(child: Text("No products found for this category."));
-    }
-
-    return SizedBox(
-      height: 300, 
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: products.length,
-        separatorBuilder: (context, index) => AppSpacing.gapHmd,
-        itemBuilder: (context, index) {
-          return SizedBox(
-            width: 200, 
-            child: ProductCard(product: products[index], index: index),
-          );
-        },
-      ),
-    ).animate().fadeIn().slideX(begin: 0.1);
   }
 }

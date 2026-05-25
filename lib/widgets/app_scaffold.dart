@@ -69,13 +69,6 @@ class AppScaffold extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Launch WhatsApp
-        },
-        backgroundColor: AppColors.whatsappGreen,
-        child: Icon(Icons.chat, color: Theme.of(context).colorScheme.surface),
-      ),
     );
   }
 }

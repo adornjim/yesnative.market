@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
@@ -179,7 +178,7 @@ class ProductCard extends ConsumerWidget {
     
     return GradientImagePlaceholder(
       child: Center(
-        child: Icon(Icons.shopping_bag_outlined, size: 48, color: Theme.of(context).colorScheme.primary.withOpacity(0.5)),
+        child: Icon(Icons.shopping_bag_outlined, size: 48, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
       ),
     );
   }

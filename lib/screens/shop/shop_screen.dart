@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../providers/products_provider.dart';
 import '../../widgets/product_card.dart';
 
 class ShopScreen extends ConsumerStatefulWidget {
-  const ShopScreen({super.key});
+  final String selectedCategory;
+
+  const ShopScreen({
+    super.key,
+    required this.selectedCategory,
+  });
 
   @override
   ConsumerState<ShopScreen> createState() => _ShopScreenState();
 }
 
 class _ShopScreenState extends ConsumerState<ShopScreen> {
-  String _selectedCategory = 'all';
+  late String _selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategory = widget.selectedCategory;
+  }
 
   final List<Map<String, String>> _categories = [
     {'id': 'all', 'label': 'All Products'},

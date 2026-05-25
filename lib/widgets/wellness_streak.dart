@@ -31,7 +31,7 @@ class WellnessStreak extends StatelessWidget {
                   color: isCompleted
                       ? Theme.of(context).colorScheme.primary
                       : isToday
-                          ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
+                          ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
                           : Theme.of(context).colorScheme.surface,
                   border: Border.all(
                     color: isCompleted || isToday
