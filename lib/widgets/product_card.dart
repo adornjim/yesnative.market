@@ -28,8 +28,10 @@ class ProductCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formatCurrency = NumberFormat.currency(locale: 'en_IN', symbol: '₹', decimalDigits: 0);
 
-    return GlassCard(
-      padding: EdgeInsets.zero,
+    return GestureDetector(
+      onTap: () => context.push('/product/${product.id}'),
+      child: GlassCard(
+        padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -59,35 +61,47 @@ class ProductCard extends ConsumerWidget {
                   child: Consumer(
                     builder: (context, ref, child) {
                       final isFavorite = ref.watch(wishlistProvider).contains(product.id);
-                      return Material(
-                        color: Colors.transparent,
-                        shape: const CircleBorder(),
-                        clipBehavior: Clip.hardEdge,
-                        child: IconButton(
-                          onPressed: () {
-                            final notifier = ref.read(wishlistProvider.notifier);
-                            notifier.toggleFavorite(product.id);
-                            if (notifier.isFavorite(product.id)) {
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('${product.name} added to wishlist'),
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                  duration: const Duration(seconds: 3),
-                                  behavior: SnackBarBehavior.floating,
-                                  action: SnackBarAction(
-                                    label: 'VIEW',
-                                    textColor: Theme.of(context).colorScheme.surface,
-                                    onPressed: () => context.push('/wishlist'),
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+                          shape: BoxShape.circle,
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          shape: const CircleBorder(),
+                          clipBehavior: Clip.hardEdge,
+                          child: IconButton(
+                            onPressed: () {
+                              final notifier = ref.read(wishlistProvider.notifier);
+                              notifier.toggleFavorite(product.id);
+                              if (notifier.isFavorite(product.id)) {
+                                ScaffoldMessenger.of(context).clearSnackBars();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('${product.name} added to wishlist'),
+                                    backgroundColor: Theme.of(context).colorScheme.primary,
+                                    duration: const Duration(seconds: 3),
+                                    behavior: SnackBarBehavior.floating,
+                                    action: SnackBarAction(
+                                      label: 'VIEW',
+                                      textColor: Theme.of(context).colorScheme.surface,
+                                      onPressed: () => context.push('/wishlist'),
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          icon: Icon(
-                            isFavorite ? Icons.favorite : Icons.favorite_border,
-                            color: isFavorite ? Colors.red : Colors.grey.shade600,
-                          ).animate(target: isFavorite ? 1 : 0).scaleXY(end: 1.2).then().scaleXY(end: 1.0),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              isFavorite ? Icons.favorite : Icons.favorite_border,
+                              color: isFavorite ? Colors.red : Colors.grey.shade600,
+                              size: 20,
+                            ).animate(target: isFavorite ? 1 : 0).scaleXY(end: 1.2).then().scaleXY(end: 1.0),
+                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                            padding: EdgeInsets.zero,
+                          ),
                         ),
                       );
                     },
@@ -210,6 +224,7 @@ class ProductCard extends ConsumerWidget {
             ),
           ),
         ],
+      ),
       ),
     ).animate().fadeIn(delay: (index * 50).ms, duration: 400.ms).slideY(begin: 0.1, curve: Curves.easeOutQuad);
   }
