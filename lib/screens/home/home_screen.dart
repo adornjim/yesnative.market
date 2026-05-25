@@ -41,6 +41,10 @@ class HomeScreen extends ConsumerWidget {
             centerTitle: true,
             actions: [
               IconButton(
+                icon: const Icon(Icons.favorite_border),
+                onPressed: () => context.push('/wishlist'),
+              ),
+              IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () => context.go('/search'),
               ),

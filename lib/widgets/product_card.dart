@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
@@ -65,7 +66,24 @@ class ProductCard extends ConsumerWidget {
                         clipBehavior: Clip.hardEdge,
                         child: IconButton(
                           onPressed: () {
-                            ref.read(wishlistProvider.notifier).toggleFavorite(product.id);
+                            final notifier = ref.read(wishlistProvider.notifier);
+                            notifier.toggleFavorite(product.id);
+                            if (notifier.isFavorite(product.id)) {
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('${product.name} added to wishlist'),
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  duration: const Duration(seconds: 3),
+                                  behavior: SnackBarBehavior.floating,
+                                  action: SnackBarAction(
+                                    label: 'VIEW',
+                                    textColor: Theme.of(context).colorScheme.surface,
+                                    onPressed: () => context.push('/wishlist'),
+                                  ),
+                                ),
+                              );
+                            }
                           },
                           icon: Icon(
                             isFavorite ? Icons.favorite : Icons.favorite_border,
