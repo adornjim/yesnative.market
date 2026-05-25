@@ -5,12 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../providers/theme_provider.dart';
+import '../../providers/auth_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -21,7 +24,7 @@ class ProfileScreen extends ConsumerWidget {
         padding: AppSpacing.edgeInsetsMd,
         child: Column(
           children: [
-            // User Header (Not Logged In State)
+            // User Header
             Container(
               padding: AppSpacing.edgeInsetsLg,
               decoration: BoxDecoration(
@@ -35,27 +38,55 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    child: Icon(Icons.person_outline, size: 40, color: Theme.of(context).colorScheme.primary),
-                  ),
-                  AppSpacing.gapVmd,
-                  Text('Welcome to Yes Native', style: Theme.of(context).textTheme.titleLarge),
-                  AppSpacing.gapVsm,
-                  const Text('Login to access your orders and saved items.', textAlign: TextAlign.center),
-                  AppSpacing.gapVlg,
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => context.push('/login'),
-                      child: const Text('Login / Sign Up'),
+              child: authState.isLoggedIn
+                  ? Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          child: Text(
+                            authState.userName?[0].toUpperCase() ?? 'U',
+                            style: TextStyle(fontSize: 32, color: Theme.of(context).colorScheme.surface),
+                          ),
+                        ),
+                        AppSpacing.gapVmd,
+                        Text(authState.userName ?? 'User', style: Theme.of(context).textTheme.titleLarge),
+                        AppSpacing.gapVsm,
+                        Text(authState.userEmail ?? '', style: TextStyle(color: Colors.grey[600])),
+                        AppSpacing.gapVlg,
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              ref.read(authProvider.notifier).signOut();
+                              context.go('/login');
+                            },
+                            child: const Text('Sign Out'),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          child: Icon(Icons.person_outline, size: 40, color: Theme.of(context).colorScheme.primary),
+                        ),
+                        AppSpacing.gapVmd,
+                        Text('Welcome to Yes Native', style: Theme.of(context).textTheme.titleLarge),
+                        AppSpacing.gapVsm,
+                        const Text('Login to access your orders and saved items.', textAlign: TextAlign.center),
+                        AppSpacing.gapVlg,
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () => context.push('/login'),
+                            child: const Text('Login / Sign Up'),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
             
             AppSpacing.gapVlg,
@@ -69,7 +100,7 @@ class ProfileScreen extends ConsumerWidget {
                 children: [
                   _buildMenuItem(context, Icons.shopping_bag_outlined, 'My Orders', () => _showLoginToast(context)),
                   const Divider(height: 1),
-                  _buildMenuItem(context, Icons.favorite_border, 'Wishlist', () => _showLoginToast(context)),
+                  _buildMenuItem(context, Icons.favorite_border, 'Wishlist', () => context.push('/wishlist')),
                   const Divider(height: 1),
                   _buildMenuItem(context, Icons.location_on_outlined, 'Saved Addresses', () => _showLoginToast(context)),
                 ],
@@ -133,11 +164,9 @@ class ProfileScreen extends ConsumerWidget {
   void _showLoginToast(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Please login to access this feature.'),
+        content: const Text('Please login to access this feature.'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
 }
-
-

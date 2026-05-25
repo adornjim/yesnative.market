@@ -6,6 +6,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_spacing.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
+import '../providers/wishlist_provider.dart';
 import 'gradient_image_placeholder.dart';
 import 'glass_card.dart';
 
@@ -35,18 +36,47 @@ class ProductCard extends ConsumerWidget {
           // Image 
           Expanded(
             flex: 4,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
-              child: product.imageUrl != null 
-                  ? Image.network(
-                      product.imageUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stack) => _buildPlaceholder(context),
-                    )
-                  : _buildPlaceholder(context),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                    child: product.imageUrl != null 
+                        ? Image.asset(
+                            product.imageUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stack) => _buildPlaceholder(context),
+                          )
+                        : _buildPlaceholder(context),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final isFavorite = ref.watch(wishlistProvider).contains(product.id);
+                      return Material(
+                        color: Colors.transparent,
+                        shape: const CircleBorder(),
+                        clipBehavior: Clip.hardEdge,
+                        child: IconButton(
+                          onPressed: () {
+                            ref.read(wishlistProvider.notifier).toggleFavorite(product.id);
+                          },
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorite ? Colors.red : Colors.grey.shade600,
+                          ).animate(target: isFavorite ? 1 : 0).scaleXY(end: 1.2).then().scaleXY(end: 1.0),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           
