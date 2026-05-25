@@ -1,10 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier();
-});
-
 class AuthState {
   final bool isLoggedIn;
   final String? userName;
@@ -13,9 +9,11 @@ class AuthState {
   AuthState({this.isLoggedIn = false, this.userName, this.userEmail});
 }
 
-class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(AuthState()) {
+class AuthNotifier extends Notifier<AuthState> {
+  @override
+  AuthState build() {
     _loadState();
+    return AuthState();
   }
 
   Future<void> _loadState() async {
@@ -27,7 +25,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> signInWithGoogle() async {
-    // Mock sign in
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
     await prefs.setString('userName', 'Guest User');
@@ -43,3 +40,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = AuthState();
   }
 }
+
+final authProvider = NotifierProvider<AuthNotifier, AuthState>(() {
+  return AuthNotifier();
+});
