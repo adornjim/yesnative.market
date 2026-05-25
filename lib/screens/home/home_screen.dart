@@ -41,17 +41,6 @@ class HomeScreen extends ConsumerWidget {
             centerTitle: true,
             actions: [
               IconButton(
-                icon: const Icon(Icons.notifications_none),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationPage(),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () => context.go('/search'),
               ),

@@ -98,12 +98,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           
           // Skip button
           Positioned(
-            top: 48,
-            right: 16,
-            child: TextButton(
-              onPressed: _finishOnboarding,
-              child: Text('Skip', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-            ),
+            bottom: 110,
+            right: 24,
+            child: _isLastPage
+                ? const SizedBox.shrink()
+                : TextButton(
+                    onPressed: _finishOnboarding,
+                    child: Text('Skip', style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold)),
+                  ),
           ),
         ],
       ),

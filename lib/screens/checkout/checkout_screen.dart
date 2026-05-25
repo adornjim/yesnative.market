@@ -15,6 +15,8 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   int _currentStep = 0;
   bool _isSuccess = false;
+  String _selectedPaymentMethod = 'upi';
+  String? _selectedUpiApp = 'gpay';
 
   @override
   Widget build(BuildContext context) {
@@ -118,29 +120,86 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget _buildPaymentMethod() {
     return Column(
       children: [
-        RadioListTile(
+        RadioListTile<String>(
           value: 'upi',
-          groupValue: 'upi',
-          onChanged: (val) {},
-          title: const Text('UPI (Google Pay, PhonePe)'),
-          secondary: const Icon(Icons.qr_code),
+          groupValue: _selectedPaymentMethod,
+          onChanged: (val) => setState(() => _selectedPaymentMethod = val!),
+          title: const Text('UPI Apps', style: TextStyle(fontWeight: FontWeight.bold)),
+          secondary: Icon(Icons.qr_code, color: Theme.of(context).colorScheme.primary),
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
-        RadioListTile(
+        if (_selectedPaymentMethod == 'upi')
+          Padding(
+            padding: const EdgeInsets.only(left: 56.0, right: 16.0, bottom: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildUpiOption('gpay', 'Google Pay', Icons.g_mobiledata),
+                const SizedBox(height: 8),
+                _buildUpiOption('phonepe', 'PhonePe', Icons.payments_outlined),
+                const SizedBox(height: 8),
+                _buildUpiOption('paytm', 'Paytm', Icons.account_balance_wallet_outlined),
+              ],
+            ).animate().fadeIn().slideY(begin: -0.1),
+          ),
+        
+        RadioListTile<String>(
           value: 'card',
-          groupValue: 'upi',
-          onChanged: (val) {},
-          title: const Text('Credit/Debit Card'),
+          groupValue: _selectedPaymentMethod,
+          onChanged: (val) => setState(() => _selectedPaymentMethod = val!),
+          title: const Text('Credit / Debit Card'),
           secondary: const Icon(Icons.credit_card),
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
-        RadioListTile(
+        RadioListTile<String>(
           value: 'cod',
-          groupValue: 'upi',
-          onChanged: (val) {},
+          groupValue: _selectedPaymentMethod,
+          onChanged: (val) => setState(() => _selectedPaymentMethod = val!),
           title: const Text('Cash on Delivery'),
           secondary: const Icon(Icons.money),
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
       ],
     ).animate().fadeIn().slideX(begin: 0.1);
+  }
+
+  Widget _buildUpiOption(String id, String name, IconData icon) {
+    final isSelected = _selectedUpiApp == id;
+    return InkWell(
+      onTap: () => setState(() => _selectedUpiApp = id),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade300,
+            width: isSelected ? 2 : 1,
+          ),
+          color: isSelected ? Theme.of(context).colorScheme.primary.withOpacity(0.05) : Colors.transparent,
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))
+                ]
+              ),
+              child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
+            ),
+            AppSpacing.gapHmd,
+            Text(name, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+            const Spacer(),
+            if (isSelected)
+              Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildReview(WidgetRef ref) {

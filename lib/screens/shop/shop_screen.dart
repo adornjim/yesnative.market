@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_spacing.dart';
 import '../../providers/products_provider.dart';
@@ -45,6 +46,12 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
       appBar: AppBar(
         title: const Text('Our Products'),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border),
+            onPressed: () => context.push('/wishlist'), // Navigate to wishlist
+          ),
+        ],
       ),
       body: Column(
         children: [

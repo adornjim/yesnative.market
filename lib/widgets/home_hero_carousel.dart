@@ -19,18 +19,18 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
   final List<Map<String, String>> _slides = [
     {
       'image': 'assets/images/hero_1.jpg',
-      'label': 'Rooted in Tradition',
-      'title': 'Functional Superfoods Built for Modern Lifestyles',
+      'label': 'Welcome to Yes Native',
+      'title': 'Where tradition meets modern wellness.',
     },
     {
       'image': 'assets/images/hero_2.jpg',
-      'label': 'Clean Label Nutrition',
-      'title': '100% natural ingredients. No preservatives.',
+      'label': 'Fuel Your Day, Naturally',
+      'title': 'Clean energy for every lifestyle.',
     },
     {
       'image': 'assets/images/hero_3.jpg',
-      'label': 'Your Wellness Journey',
-      'title': 'Millet-based nutrition designed for everyday energy.',
+      'label': 'Made for Every Family',
+      'title': "There's a Yes Native for everyone.",
     },
   ];
 
