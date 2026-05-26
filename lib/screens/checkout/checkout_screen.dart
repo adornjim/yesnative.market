@@ -392,20 +392,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             AppSpacing.gapVxl,
             ElevatedButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyOrdersPage(),
-                  ),
-                  (route) => false,
-                );
+                context.go('/orders');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 foregroundColor: Theme.of(context).colorScheme.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
               ),
-              child: const Text('Continue Shopping'),
+              child: const Text('View Orders'),
             ).animate().fadeIn(delay: 1000.ms),
           ],
         ),
