@@ -18,6 +18,8 @@ import '../../screens/checkout/checkout_screen.dart';
 import '../../screens/wishlist/wishlist_screen.dart';
 import '../../screens/product/product_details_screen.dart';
 import '../../screens/address/saved_addresses_screen.dart';
+import '../../screens/orders/orders_screen.dart';
+import '../../screens/orders/order_details_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -215,6 +217,37 @@ final appRouter = GoRouter(
           return SlideTransition(position: animation.drive(tween), child: child);
         },
       ),
+    ),
+    GoRoute(
+      path: '/orders',
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const OrdersScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return SlideTransition(
+            position: animation.drive(Tween(begin: const Offset(1.0, 0.0), end: Offset.zero).chain(CurveTween(curve: Curves.easeOutQuart))),
+            child: child,
+          );
+        },
+      ),
+    ),
+    GoRoute(
+      path: '/orders/:id',
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: OrderDetailsScreen(orderId: id),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: animation.drive(Tween(begin: const Offset(0.0, 1.0), end: Offset.zero).chain(CurveTween(curve: Curves.easeOutQuart))),
+              child: child,
+            );
+          },
+        );
+      },
     ),
   ],
 );

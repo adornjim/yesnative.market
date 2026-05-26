@@ -98,7 +98,7 @@ class ProfileScreen extends ConsumerWidget {
               clipBehavior: Clip.antiAlias,
               child: Column(
                 children: [
-                  _buildMenuItem(context, Icons.shopping_bag_outlined, 'My Orders', () => _showLoginToast(context)),
+                  _buildMenuItem(context, Icons.shopping_bag_outlined, 'My Orders', () => context.push('/orders')),
                   const Divider(height: 1),
                   _buildMenuItem(context, Icons.favorite_border, 'Wishlist', () => context.push('/wishlist')),
                   const Divider(height: 1),

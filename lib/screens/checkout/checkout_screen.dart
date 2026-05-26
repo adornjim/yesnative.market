@@ -8,6 +8,8 @@ import '../../core/theme/app_spacing.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/address_provider.dart';
 import '../../models/address.dart';
+import '../../models/order.dart';
+import '../../providers/orders_provider.dart';
 import '../address/add_address_sheet.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
@@ -69,8 +71,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       body: Stepper(
         type: StepperType.horizontal,
         currentStep: _currentStep,
-        onStepContinue: () {
+        onStepContinue: () async {
           if (_currentStep == 2) {
+            final cartItems = ref.read(cartNotifierProvider);
+            final totalAmount = ref.read(cartTotalProvider);
+            
+            final orderItems = cartItems.map((c) => OrderItem(product: c.product, quantity: c.quantity)).toList();
+            await ref.read(ordersProvider.notifier).placeOrder(orderItems, totalAmount);
+            
             setState(() => _isSuccess = true);
             ref.read(cartNotifierProvider.notifier).clearCart();
           } else {
