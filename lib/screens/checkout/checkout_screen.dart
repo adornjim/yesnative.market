@@ -4,17 +4,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_spacing.dart';
-<<<<<<< HEAD
-import '../../providers/cart_provider.dart';import '../profile/my_orders_page.dart';
-=======
 import '../../providers/cart_provider.dart';
 import '../../providers/address_provider.dart';
 import '../../models/address.dart';
 import '../../models/order.dart';
 import '../../providers/orders_provider.dart';
 import '../address/add_address_sheet.dart';
-
->>>>>>> a1d2ec749c22cce69ad9367bfcf45e0486be5ccf
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
