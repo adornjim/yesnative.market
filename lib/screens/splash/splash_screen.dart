@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/router/app_router.dart';
 import '../../widgets/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,6 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     final seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
+    
+    hasShownSplash = true;
     
     if (!isLoggedIn) {
       context.go('/login');

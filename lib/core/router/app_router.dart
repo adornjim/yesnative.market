@@ -23,9 +23,17 @@ import '../../screens/orders/order_details_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
+bool hasShownSplash = false;
+
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/splash',
+  redirect: (context, state) {
+    if (!hasShownSplash && state.uri.path != '/splash') {
+      return '/splash';
+    }
+    return null;
+  },
   errorBuilder: (context, state) => const NotFoundScreen(),
   routes: [
     StatefulShellRoute.indexedStack(
