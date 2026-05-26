@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 
 import 'package:flutter_animate/flutter_animate.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../providers/products_provider.dart';
 import '../../widgets/product_card.dart';
 import '../../widgets/home_hero_carousel.dart';
 import '../../widgets/app_logo.dart';
+import '../notification/notification_page.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -40,10 +40,6 @@ class HomeScreen extends ConsumerWidget {
             title: AppLogo(size: 20, color: Theme.of(context).colorScheme.primary),
             centerTitle: true,
             actions: [
-              IconButton(
-                icon: const Icon(Icons.favorite_border),
-                onPressed: () => context.push('/wishlist'),
-              ),
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () => context.go('/search'),

@@ -27,7 +27,7 @@ class ContactScreen extends StatelessWidget {
               child: Container(
                 padding: AppSpacing.edgeInsetsLg,
                 decoration: BoxDecoration(
-                  color: AppColors.whatsappGreen.withOpacity(0.1),
+                  color: AppColors.whatsappGreen.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.whatsappGreen),
                 ),

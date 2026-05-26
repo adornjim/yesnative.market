@@ -82,7 +82,7 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
+                          Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
                           Theme.of(context).scaffoldBackgroundColor,
                         ],
                         stops: const [0.3, 0.7, 1.0],

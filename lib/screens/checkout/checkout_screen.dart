@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+<<<<<<< HEAD
+import '../../providers/cart_provider.dart';import '../profile/my_orders_page.dart';
+=======
 import '../../providers/cart_provider.dart';
 import '../../providers/address_provider.dart';
 import '../../models/address.dart';
@@ -12,6 +14,7 @@ import '../../models/order.dart';
 import '../../providers/orders_provider.dart';
 import '../address/add_address_sheet.dart';
 
+>>>>>>> a1d2ec749c22cce69ad9367bfcf45e0486be5ccf
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -389,11 +392,19 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             AppSpacing.gapVmd,
             Text(
               'Your wellness journey continues.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.surface.withOpacity(0.8)),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8)),
             ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5),
             AppSpacing.gapVxl,
             ElevatedButton(
-              onPressed: () => context.go('/'),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyOrdersPage(),
+                  ),
+                  (route) => false,
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 foregroundColor: Theme.of(context).colorScheme.primary,
