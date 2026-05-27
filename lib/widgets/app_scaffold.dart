@@ -59,7 +59,7 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> with SingleTickerProv
           Positioned.fill(
             child: Center(
               child: Opacity(
-                opacity: 0.03, // Very subtle transparent background
+                opacity: 0.15, // Increased to 15% opacity for better visibility
                 child: Image.asset(
                   'assets/images/app_icon.png', // Using the cropped leaf logo for a cleaner watermark
                   width: 200,
