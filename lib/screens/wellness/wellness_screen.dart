@@ -68,7 +68,7 @@ class _WellnessScreenState extends ConsumerState<WellnessScreen> {
   }
 
   Widget _buildWeightManagementCard() {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.push(
           context,
@@ -77,32 +77,36 @@ class _WellnessScreenState extends ConsumerState<WellnessScreen> {
           ),
         );
       },
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: AppSpacing.edgeInsetsMd,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.monitor_weight_outlined,
-                size: 40,
-                color: Color(0xFF234F2A)),
-            SizedBox(height: 20),
-            Text(
-              "Weight Management",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+          children: [
+            Container(
+              padding: AppSpacing.edgeInsetsSm,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                shape: BoxShape.circle,
               ),
+              child: Icon(Icons.monitor_weight_outlined, color: Theme.of(context).colorScheme.primary, size: 28),
+            ),
+            AppSpacing.gapVmd,
+            Text(
+              'Weight Management',
+              style: Theme.of(context).textTheme.titleSmall,
+              textAlign: TextAlign.center,
             ),
           ],
         ),

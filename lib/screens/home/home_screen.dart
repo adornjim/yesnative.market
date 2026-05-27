@@ -47,6 +47,31 @@ class HomeScreen extends ConsumerWidget {
                 icon: const Icon(Icons.search),
                 onPressed: () => context.go('/search'),
               ),
+              IconButton(
+                icon: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Icon(Icons.notifications_none),
+                    Positioned(
+                      right: -1,
+                      top: -1,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NotificationPage()),
+                ),
+                tooltip: 'Notifications',
+              ),
             ],
           ),
           
