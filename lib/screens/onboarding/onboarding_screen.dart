@@ -21,17 +21,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'Rooted in Tradition',
       'subtitle': 'Discover functional superfoods crafted from ancient wisdom for modern lifestyles.',
-      'image': 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop', // Nature/Farm
+      'image': 'assets/images/hero_1.jpg',
     },
     {
       'title': 'Clean Label Nutrition',
       'subtitle': '100% natural ingredients. No preservatives, no artificial flavors. Just pure goodness.',
-      'image': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000&auto=format&fit=crop', // Healthy Food
+      'image': 'assets/images/hero_2.jpg',
     },
     {
       'title': 'Your Wellness Journey',
       'subtitle': 'Millet-based nutrition designed to support your specific wellness goals every day.',
-      'image': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1000&auto=format&fit=crop', // Yoga/Wellness
+      'image': 'assets/images/hero_3.jpg',
     },
   ];
 
@@ -138,13 +138,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40),
               ),
-              child: Image.network(
+              child: Image.asset(
                 slide['image']!,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return GradientImagePlaceholder(child: Container());
-                },
               ),
             ),
           ),

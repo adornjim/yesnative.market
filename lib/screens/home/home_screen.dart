@@ -21,14 +21,17 @@ class HomeScreen extends ConsumerWidget {
       body: CustomScrollView(
         slivers: [
           // Announcement Bar
-          SliverToBoxAdapter(
-            child: Container(
-              color: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              alignment: Alignment.center,
-              child: Text(
-                'Traditional Wellness for Modern Living • Clean Label Millet Nutrition',
-                style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 12),
+          SliverSafeArea(
+            bottom: false,
+            sliver: SliverToBoxAdapter(
+              child: Container(
+                color: Theme.of(context).colorScheme.primary,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                alignment: Alignment.center,
+                child: Text(
+                  'Traditional Wellness for Modern Living • Clean Label Millet Nutrition',
+                  style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 12),
+                ),
               ),
             ),
           ),

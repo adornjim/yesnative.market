@@ -114,14 +114,14 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () => context.go('/shop'),
-                                child: const Text('Shop Products'),
+                                child: const FittedBox(fit: BoxFit.scaleDown, child: Text('Shop Products')),
                               ),
                             ),
                             AppSpacing.gapHmd,
                             Expanded(
                               child: OutlinedButton(
                                 onPressed: () => context.go('/wellness'),
-                                child: const Text('Explore Wellness'),
+                                child: const FittedBox(fit: BoxFit.scaleDown, child: Text('Explore Wellness')),
                               ),
                             ),
                           ],
