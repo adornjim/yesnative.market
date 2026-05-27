@@ -19,19 +19,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<Map<String, String>> _slides = [
     {
-      'title': 'Rooted in Tradition',
-      'subtitle': 'Discover functional superfoods crafted from ancient wisdom for modern lifestyles.',
-      'image': 'assets/images/hero_1.jpg',
+      'title': 'Nourish Your Body',
+      'subtitle': 'Wholesome millet goodness crafted to power your daily life naturally.',
+      'image': 'assets/images/prod_1.jpg',
     },
     {
-      'title': 'Clean Label Nutrition',
-      'subtitle': '100% natural ingredients. No preservatives, no artificial flavors. Just pure goodness.',
-      'image': 'assets/images/hero_2.jpg',
+      'title': 'Pure Ingredients',
+      'subtitle': 'Zero artificial additives. Experience the real taste of health and wellness.',
+      'image': 'assets/images/prod_4.jpg',
     },
     {
-      'title': 'Your Wellness Journey',
-      'subtitle': 'Millet-based nutrition designed to support your specific wellness goals every day.',
-      'image': 'assets/images/hero_3.jpg',
+      'title': 'Healthy Families',
+      'subtitle': 'Delicious superfood blends perfect for all ages, from kids to seniors.',
+      'image': 'assets/images/prod_6.jpg',
     },
   ];
 
@@ -83,29 +83,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: const Text('Get Started'),
                   )
                 else
-                  TextButton(
-                    onPressed: () {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    child: Text('Next', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextButton(
+                        onPressed: _finishOnboarding,
+                        child: Text('Skip', style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold)),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: Text('Next', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+                      ),
+                    ],
                   ),
               ],
             ),
-          ),
-          
-          // Skip button
-          Positioned(
-            bottom: 110,
-            right: 24,
-            child: _isLastPage
-                ? const SizedBox.shrink()
-                : TextButton(
-                    onPressed: _finishOnboarding,
-                    child: Text('Skip', style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold)),
-                  ),
           ),
         ],
       ),

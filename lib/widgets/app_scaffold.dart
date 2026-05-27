@@ -53,19 +53,36 @@ class _AppScaffoldState extends ConsumerState<AppScaffold> with SingleTickerProv
     final cartCount = ref.watch(cartCountProvider);
 
     return Scaffold(
-      body: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          final curveValue = CurvedAnimation(parent: _controller, curve: Curves.easeOutQuart).value;
-          return Opacity(
-            opacity: _controller.value,
-            child: Transform.translate(
-              offset: Offset(0, 15 * (1 - curveValue)),
-              child: child,
+      body: Stack(
+        children: [
+          // Transparent watermark background
+          Positioned.fill(
+            child: Center(
+              child: Opacity(
+                opacity: 0.03, // Very subtle transparent background
+                child: Image.asset(
+                  'assets/images/app_icon.png', // Using the cropped leaf logo for a cleaner watermark
+                  width: 200,
+                  height: 200,
+                ),
+              ),
             ),
-          );
-        },
-        child: widget.navigationShell,
+          ),
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              final curveValue = CurvedAnimation(parent: _controller, curve: Curves.easeOutQuart).value;
+              return Opacity(
+                opacity: _controller.value,
+                child: Transform.translate(
+                  offset: Offset(0, 15 * (1 - curveValue)),
+                  child: child,
+                ),
+              );
+            },
+            child: widget.navigationShell,
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: widget.navigationShell.currentIndex,

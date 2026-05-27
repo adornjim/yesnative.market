@@ -19,18 +19,18 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
   final List<Map<String, String>> _slides = [
     {
       'image': 'assets/images/hero_1.jpg',
-      'label': 'Welcome to Yes Native',
-      'title': 'Where tradition meets modern wellness.',
+      'label': 'Ancient Wisdom',
+      'title': 'Discover the power of millet nutrition.',
     },
     {
       'image': 'assets/images/hero_2.jpg',
-      'label': 'Fuel Your Day, Naturally',
-      'title': 'Clean energy for every lifestyle.',
+      'label': 'Clean & Natural',
+      'title': 'No preservatives, just pure health.',
     },
     {
       'image': 'assets/images/hero_3.jpg',
-      'label': 'Made for Every Family',
-      'title': "There's a Yes Native for everyone.",
+      'label': 'For Everyone',
+      'title': 'Nourish your family every day.',
     },
   ];
 
@@ -99,8 +99,9 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                         Text(
                           slide['label']!,
                           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Colors.white, // Changed from secondary (yellow) to white to fix overlap contrast
                             letterSpacing: 2,
+                            fontWeight: FontWeight.bold,
                           ),
                         ).animate().fadeIn().slideX(),
                         AppSpacing.gapVsm,
