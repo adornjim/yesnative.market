@@ -63,7 +63,7 @@ class ProductCard extends ConsumerWidget {
                       final isFavorite = ref.watch(wishlistProvider).contains(product.id);
                       return Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+                          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.9),
                           shape: BoxShape.circle,
                           boxShadow: const [
                             BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),

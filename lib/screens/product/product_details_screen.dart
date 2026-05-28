@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/theme/app_spacing.dart';
-import '../../models/product.dart';
 import '../../providers/products_provider.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/wishlist_provider.dart';
@@ -46,7 +45,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+            backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.9),
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => context.pop(),
@@ -57,7 +56,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+              backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.9),
               child: IconButton(
                 icon: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -195,7 +194,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     offset: const Offset(0, -4),
                     blurRadius: 10,
                   ),

@@ -16,15 +16,15 @@ class OrderDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final orders = ref.watch(ordersProvider);
     final order = orders.firstWhere((o) => o.id == orderId, orElse: () => orders.first);
-    final dateFormat = DateFormat('dd/M/yyyy, HH:mm');
+    final dateFormat = DateFormat('dd/M/yyyy, HH:mm:ss');
     final firstItem = order.items.isNotEmpty ? order.items.first.product : null;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => context.pop(),
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
         ),
         title: Text('Order #${order.orderNumber}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -72,14 +72,14 @@ class OrderDetailsScreen extends ConsumerWidget {
                             height: 10,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: order.status == OrderStatus.completed ? Colors.green : Colors.orange,
+                              color: order.status == OrderStatus.delivered ? Colors.green : Colors.orange,
                             ),
                           ),
                           const SizedBox(width: 8),
                           Text(
                             order.status.label,
                             style: TextStyle(
-                              color: order.status == OrderStatus.completed ? Colors.green : Colors.orange,
+                              color: order.status == OrderStatus.delivered ? Colors.green : Colors.orange,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -122,12 +122,16 @@ class OrderDetailsScreen extends ConsumerWidget {
 
   Widget _buildTimeline(BuildContext context, OrderStatus currentStatus) {
     int currentStepIndex = currentStatus.progressIndex;
-    
+
     return Column(
       children: [
-        _buildTimelineStep(context, 'Payment Confirmed', 0, currentStepIndex, isFirst: true),
-        _buildTimelineStep(context, 'Preparing Order', 1, currentStepIndex),
-        _buildTimelineStep(context, 'Ready to Pickup / Shipped', 2, currentStepIndex, isLast: true),
+        _buildTimelineStep(context, 'Order Placed', 0, currentStepIndex, isFirst: true),
+        _buildTimelineStep(context, 'Accepted', 1, currentStepIndex),
+        _buildTimelineStep(context, 'Preparing', 2, currentStepIndex),
+        _buildTimelineStep(context, 'Ready for Pickup', 3, currentStepIndex),
+        _buildTimelineStep(context, 'Picked Up', 4, currentStepIndex),
+        _buildTimelineStep(context, 'Out for Delivery', 5, currentStepIndex),
+        _buildTimelineStep(context, 'Delivered', 6, currentStepIndex, isLast: true),
       ],
     );
   }

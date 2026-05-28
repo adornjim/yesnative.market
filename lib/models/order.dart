@@ -2,24 +2,33 @@ import 'dart:convert';
 import 'product.dart';
 
 enum OrderStatus {
-  paymentConfirmed,
+  orderPlaced,
+  accepted,
   preparing,
-  readyToPickup,
-  completed,
+  readyForPickup,
+  pickedUp,
+  outForDelivery,
+  delivered,
   cancelled
 }
 
 extension OrderStatusExtension on OrderStatus {
   String get label {
     switch (this) {
-      case OrderStatus.paymentConfirmed:
-        return 'Payment Confirmed';
+      case OrderStatus.orderPlaced:
+        return 'Order Placed';
+      case OrderStatus.accepted:
+        return 'Accepted';
       case OrderStatus.preparing:
-        return 'Preparing Food';
-      case OrderStatus.readyToPickup:
-        return 'Ready to Pickup';
-      case OrderStatus.completed:
-        return 'Completed';
+        return 'Preparing';
+      case OrderStatus.readyForPickup:
+        return 'Ready for Pickup';
+      case OrderStatus.pickedUp:
+        return 'Picked Up';
+      case OrderStatus.outForDelivery:
+        return 'Out for Delivery';
+      case OrderStatus.delivered:
+        return 'Delivered';
       case OrderStatus.cancelled:
         return 'Cancelled';
     }
@@ -27,14 +36,20 @@ extension OrderStatusExtension on OrderStatus {
 
   int get progressIndex {
     switch (this) {
-      case OrderStatus.paymentConfirmed:
+      case OrderStatus.orderPlaced:
         return 0;
-      case OrderStatus.preparing:
+      case OrderStatus.accepted:
         return 1;
-      case OrderStatus.readyToPickup:
+      case OrderStatus.preparing:
         return 2;
-      case OrderStatus.completed:
+      case OrderStatus.readyForPickup:
         return 3;
+      case OrderStatus.pickedUp:
+        return 4;
+      case OrderStatus.outForDelivery:
+        return 5;
+      case OrderStatus.delivered:
+        return 6;
       case OrderStatus.cancelled:
         return -1;
     }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../models/address.dart';
 import '../../providers/address_provider.dart';
@@ -178,7 +177,7 @@ class _AddAddressSheetState extends ConsumerState<AddAddressSheet> {
                     onSelected: (selected) {
                       if (selected) setState(() => _type = t);
                     },
-                    selectedColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    selectedColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
                     checkmarkColor: Theme.of(context).colorScheme.primary,
                   );
                 }).toList(),
@@ -190,7 +189,7 @@ class _AddAddressSheetState extends ConsumerState<AddAddressSheet> {
                 title: const Text('Set as Default Address'),
                 value: _isDefault,
                 onChanged: (val) => setState(() => _isDefault = val),
-                activeColor: Theme.of(context).colorScheme.primary,
+                activeThumbColor: Theme.of(context).colorScheme.primary,
               ),
               
               AppSpacing.gapVlg,

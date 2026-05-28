@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/order.dart';
-import '../models/product.dart';
 import 'products_provider.dart';
 
 class OrdersNotifier extends Notifier<List<Order>> {
@@ -34,7 +33,7 @@ class OrdersNotifier extends Notifier<List<Order>> {
         final dummyOrder = Order(
           id: _uuid.v4(),
           orderNumber: 'NRK2026051300005',
-          date: DateTime.now().subtract(const Duration(hours: 2)),
+          date: DateTime.now(),
           status: OrderStatus.preparing,
           totalAmount: 598.50,
           items: [
@@ -62,7 +61,7 @@ class OrdersNotifier extends Notifier<List<Order>> {
       id: _uuid.v4(),
       orderNumber: orderNum,
       date: now,
-      status: OrderStatus.paymentConfirmed, // New orders start as confirmed
+      status: OrderStatus.orderPlaced, // New orders start as placed
       totalAmount: totalAmount,
       items: items,
       addressId: addressId,

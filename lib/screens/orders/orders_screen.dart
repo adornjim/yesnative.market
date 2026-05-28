@@ -60,7 +60,7 @@ class OrdersScreen extends ConsumerWidget {
   }
 
   Widget _buildOrderCard(BuildContext context, Order order) {
-    final dateFormat = DateFormat('dd/M/yyyy, HH:mm');
+    final dateFormat = DateFormat('dd/M/yyyy, HH:mm:ss');
     // For the UI we take the first product image
     final firstItem = order.items.isNotEmpty ? order.items.first.product : null;
     
@@ -69,12 +69,15 @@ class OrdersScreen extends ConsumerWidget {
 
     Color statusColor;
     switch (order.status) {
-      case OrderStatus.paymentConfirmed:
+      case OrderStatus.orderPlaced:
+      case OrderStatus.accepted:
       case OrderStatus.preparing:
-      case OrderStatus.readyToPickup:
+      case OrderStatus.readyForPickup:
+      case OrderStatus.pickedUp:
+      case OrderStatus.outForDelivery:
         statusColor = Colors.orange;
         break;
-      case OrderStatus.completed:
+      case OrderStatus.delivered:
         statusColor = Colors.green;
         break;
       case OrderStatus.cancelled:
@@ -135,11 +138,11 @@ class OrdersScreen extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.1),
+                          color: statusColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          order.status.name.toUpperCase(),
+                          order.status.label.toUpperCase(),
                           style: TextStyle(
                             color: statusColor,
                             fontWeight: FontWeight.bold,

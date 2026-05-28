@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,11 +10,7 @@ import '../../models/address.dart';
 import '../../models/order.dart';
 import '../../providers/orders_provider.dart';
 import '../address/add_address_sheet.dart';
-<<<<<<< Updated upstream
-=======
-import '../profile/my_orders_page.dart';
 
->>>>>>> Stashed changes
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -412,3 +408,5 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     );
   }
 }
+
+
