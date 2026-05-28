@@ -1,5 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AuthState {
   final bool isLoggedIn;
@@ -12,31 +15,61 @@ class AuthState {
 class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() {
-    _loadState();
+    _initAuthListener();
     return AuthState();
   }
 
-  Future<void> _loadState() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    final userName = prefs.getString('userName');
-    final userEmail = prefs.getString('userEmail');
-    state = AuthState(isLoggedIn: isLoggedIn, userName: userName, userEmail: userEmail);
+  void _initAuthListener() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        state = AuthState(
+          isLoggedIn: true,
+          userName: user.displayName ?? 'User',
+          userEmail: user.email ?? '',
+        );
+      } else {
+        state = AuthState(isLoggedIn: false);
+      }
+    });
   }
 
   Future<void> signInWithGoogle() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', true);
-    await prefs.setString('userName', 'Guest User');
-    await prefs.setString('userEmail', 'guest@example.com');
-    state = AuthState(isLoggedIn: true, userName: 'Guest User', userEmail: 'guest@example.com');
+    try {
+      if (kIsWeb) {
+        // On web: use Firebase's native popup (no OAuth client ID needed)
+        final GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        googleProvider.addScope('email');
+        googleProvider.addScope('profile');
+        await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      } else {
+        // On Android/iOS: use google_sign_in package
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        if (googleUser == null) return; // User canceled
+
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+    } catch (e) {
+      print('Error during Google Sign-In: $e');
+      rethrow;
+    }
   }
 
   Future<void> signOut() async {
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('isLoggedIn');
-    await prefs.remove('userName');
-    await prefs.remove('userEmail');
     state = AuthState();
   }
 }

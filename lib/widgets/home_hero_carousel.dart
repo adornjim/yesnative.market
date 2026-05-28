@@ -107,7 +107,11 @@ class _HomeHeroCarouselState extends State<HomeHeroCarousel> {
                         AppSpacing.gapVsm,
                         Text(
                           slide['title']!,
-                          style: Theme.of(context).textTheme.displaySmall,
+                          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                            color: Colors.white, // Ensure title is visible over dark image
+                            fontWeight: FontWeight.bold,
+                            height: 1.2,
+                          ),
                         ).animate().fadeIn(delay: 200.ms).slideX(),
                         AppSpacing.gapVlg,
                         Row(

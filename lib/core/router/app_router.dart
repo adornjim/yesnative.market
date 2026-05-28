@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../widgets/app_scaffold.dart';
 import '../../screens/home/home_screen.dart';
@@ -32,6 +33,19 @@ final appRouter = GoRouter(
     if (!hasShownSplash && state.uri.path != '/splash') {
       return '/splash';
     }
+    
+    // Global Auth Guard
+    final bool loggedIn = FirebaseAuth.instance.currentUser != null;
+    final bool isLoggingIn = state.uri.path == '/login' || state.uri.path == '/onboarding' || state.uri.path == '/splash';
+    
+    if (!loggedIn && !isLoggingIn) {
+      return '/login';
+    }
+    
+    if (loggedIn && state.uri.path == '/login') {
+      return '/'; // Redirect to home if already logged in
+    }
+    
     return null;
   },
   errorBuilder: (context, state) => const NotFoundScreen(),

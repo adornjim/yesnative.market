@@ -9,11 +9,18 @@ import '../../core/theme/app_spacing.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/app_logo.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary, // Dark green background
       body: Column(
@@ -82,21 +89,50 @@ class LoginScreen extends ConsumerWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () async {
-                        await ref.read(authProvider.notifier).signInWithGoogle();
-                        final prefs = await SharedPreferences.getInstance();
-                        final seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
-                        if (!context.mounted) return;
-                        
-                        if (!seenOnboarding) {
-                          context.go('/onboarding');
-                        } else {
-                          context.go('/');
+                      onPressed: _isLoading ? null : () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        try {
+                          await ref.read(authProvider.notifier).signInWithGoogle();
+                          
+                          // Check if they need onboarding
+                          final prefs = await SharedPreferences.getInstance();
+                          final seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
+                          
+                          if (!mounted) return;
+                          
+                          if (!seenOnboarding) {
+                            context.go('/onboarding');
+                          } else {
+                            context.go('/');
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Failed to sign in with Google. Please try again.'),
+                                backgroundColor: Theme.of(context).colorScheme.error,
+                              ),
+                            );
+                          }
+                        } finally {
+                          if (mounted) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          }
                         }
                       },
-                      icon: _buildGoogleIcon(),
-                      label: const Text(
-                        'Continue with Google',
+                      icon: _isLoading 
+                          ? const SizedBox(
+                              width: 24, 
+                              height: 24, 
+                              child: CircularProgressIndicator(strokeWidth: 2)
+                            )
+                          : _buildGoogleIcon(),
+                      label: Text(
+                        _isLoading ? 'Signing in...' : 'Continue with Google',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

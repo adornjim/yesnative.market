@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550789388423",
+    "project_id": "yesnativeuser",
+    "storage_bucket": "yesnativeuser.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550789388423:android:c3d4317fe232b3d0030022",
+        "android_client_info": {
+          "package_name": "com.yesnative.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBCgVtD1g_pfSyHhrCydvX9vpNeZhGiE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

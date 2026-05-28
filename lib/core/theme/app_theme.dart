@@ -18,7 +18,7 @@ class AppTheme {
         onSecondary: AppColors.white,
         onSurface: AppColors.textPrimaryLight,
       ),
-      scaffoldBackgroundColor: AppColors.lightBackground,
+      scaffoldBackgroundColor: Colors.transparent, // Allow global watermark to show through
       textTheme: AppTypography.textTheme.apply(
         bodyColor: AppColors.textPrimaryLight,
         displayColor: AppColors.primaryGreen,
@@ -72,7 +72,7 @@ class AppTheme {
         onSecondary: AppColors.black,
         onSurface: AppColors.textPrimaryDark,
       ),
-      scaffoldBackgroundColor: AppColors.darkBackground,
+      scaffoldBackgroundColor: Colors.transparent, // Allow global watermark to show through
       textTheme: AppTypography.textTheme.apply(
         bodyColor: AppColors.textPrimaryDark,
         displayColor: AppColors.accentGold,
