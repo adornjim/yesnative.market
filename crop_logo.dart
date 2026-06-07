@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:image/image.dart' as img;
 
 void main() {
-  final file = File('assets/images/logo.png');
+  final file = File('assets/images/nevarkfoods.png');
   final image = img.decodePng(file.readAsBytesSync());
   if (image == null) return;
   

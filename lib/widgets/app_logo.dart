@@ -17,7 +17,7 @@ class AppLogo extends StatelessWidget {
     return Hero(
       tag: 'app_logo',
       child: Image.asset(
-        'assets/images/logo.png',
+        'assets/images/nevarkfoods.png',
         height: size * 1.8,
         fit: BoxFit.contain,
         color: logoColor,

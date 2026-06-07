@@ -29,7 +29,7 @@ class YesNativeApp extends ConsumerWidget {
                 child: Opacity(
                   opacity: isLightMode ? 0.15 : 0.05, // 15% in light mode, 5% in dark mode
                   child: Image.asset(
-                    'assets/images/logo.png', // Using the full logo which is known to be correct and transparent
+                    'assets/images/nevarkfoods.png', // Using the full logo which is known to be correct and transparent
                     width: 250,
                   ),
                 ),
