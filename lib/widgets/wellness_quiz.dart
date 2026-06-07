@@ -111,6 +111,21 @@ class _WellnessQuizState extends ConsumerState<WellnessQuiz> {
 
   Widget _buildResult(WidgetRef ref) {
     final products = ref.watch(productsProvider);
+    
+    if (products.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("No products available to recommend right now.", textAlign: TextAlign.center),
+          AppSpacing.gapVmd,
+          TextButton(
+            onPressed: _resetQuiz,
+            child: const Text("Retake Quiz"),
+          )
+        ],
+      ).animate().fadeIn().scale();
+    }
+
     final match = products.firstWhere(
       (p) => p.category == _selectedGoal,
       orElse: () => products.first,

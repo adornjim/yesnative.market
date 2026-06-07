@@ -106,7 +106,7 @@ class ProductsNotifier extends Notifier<List<Product>> {
   Future<void> _fetchProducts() async {
     try {
       final data = await ApiClient.get('/products/public');
-      state = (data as List).map((e) => Product(
+      final fetchedProducts = (data as List).map((e) => Product(
         id: e['id'],
         name: e['name'],
         price: (e['price'] as num).toDouble(),
@@ -118,6 +118,13 @@ class ProductsNotifier extends Notifier<List<Product>> {
         imageUrl: e['imageUrl'],
         additionalImages: List<String>.from(e['additionalImages'] ?? []),
       )).toList();
+      
+      if (fetchedProducts.isNotEmpty) {
+        state = fetchedProducts;
+      } else {
+        // Fallback to hardcoded products if the database is empty
+        state = _hardcodedProducts;
+      }
     } catch (e) {
       print('Failed to fetch products: $e');
     }

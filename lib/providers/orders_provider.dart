@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/order.dart';
+import '../models/product.dart';
 import 'products_provider.dart';
 import '../core/api/api_client.dart';
 
@@ -24,15 +25,15 @@ class OrdersNotifier extends Notifier<List<Order>> {
             final product = allProducts.firstWhere(
               (p) => p.name == bi['productName'],
               orElse: () => Product(
-                id: 'unknown',
+                id: -1,
                 name: bi['productName'] ?? 'Unknown Product',
                 price: (bi['price'] ?? 0).toDouble(),
                 category: '',
                 description: '',
                 imageUrl: '',
-                tags: [],
                 benefits: [],
-                ingredients: [],
+                rating: 0.0,
+                reviews: 0,
               ),
             );
             return OrderItem(
@@ -63,7 +64,7 @@ class OrdersNotifier extends Notifier<List<Order>> {
   OrderStatus _parseStatus(String? status) {
     switch (status) {
       case 'pending':
-        return OrderStatus.pending;
+        return OrderStatus.orderPlaced;
       case 'confirmed':
       case 'processing':
         return OrderStatus.preparing;
@@ -75,7 +76,7 @@ class OrdersNotifier extends Notifier<List<Order>> {
       case 'cancelled':
         return OrderStatus.cancelled;
       default:
-        return OrderStatus.pending;
+        return OrderStatus.orderPlaced;
     }
   }
 
