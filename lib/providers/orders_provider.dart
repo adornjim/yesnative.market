@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
 
 import '../models/order.dart';
 import 'products_provider.dart';
+import '../core/api/api_client.dart';
 
 class OrdersNotifier extends Notifier<List<Order>> {
-  static const _storageKey = 'user_orders';
-  final _uuid = const Uuid();
-
   @override
   List<Order> build() {
     _loadOrders();
@@ -17,59 +13,91 @@ class OrdersNotifier extends Notifier<List<Order>> {
   }
 
   Future<void> _loadOrders() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? ordersJson = prefs.getString(_storageKey);
-    final allProducts = ref.read(productsProvider);
-    
-    if (ordersJson != null) {
-      final List<dynamic> decodedList = json.decode(ordersJson);
-      final List<Order> orders = decodedList.map((item) => Order.fromMap(item, allProducts)).toList();
-      // Sort orders by date descending
-      orders.sort((a, b) => b.date.compareTo(a.date));
-      state = orders;
-    } else {
-      // Add a dummy order for demonstration if empty
-      if (allProducts.isNotEmpty) {
-        final dummyOrder = Order(
-          id: _uuid.v4(),
-          orderNumber: 'NRK2026051300005',
-          date: DateTime.now(),
-          status: OrderStatus.preparing,
-          totalAmount: 598.50,
-          items: [
-            OrderItem(product: allProducts[0], quantity: 1),
-            if (allProducts.length > 1) OrderItem(product: allProducts[1], quantity: 2),
-          ],
-        );
-        state = [dummyOrder];
-        _saveOrders([dummyOrder]);
-      }
+    try {
+      final data = await ApiClient.get('/orders/me');
+      final allProducts = ref.read(productsProvider);
+      
+      final List<Order> orders = (data as List).map((item) {
+          // Map backend items to OrderItems
+          final backendItems = item['items'] as List<dynamic>? ?? [];
+          final orderItems = backendItems.map((bi) {
+            final product = allProducts.firstWhere(
+              (p) => p.name == bi['productName'],
+              orElse: () => Product(
+                id: 'unknown',
+                name: bi['productName'] ?? 'Unknown Product',
+                price: (bi['price'] ?? 0).toDouble(),
+                category: '',
+                description: '',
+                imageUrl: '',
+                tags: [],
+                benefits: [],
+                ingredients: [],
+              ),
+            );
+            return OrderItem(
+              product: product,
+              quantity: bi['quantity'] ?? 1,
+            );
+          }).toList();
+
+          return Order(
+            id: item['_id'],
+            orderNumber: item['orderId'],
+            date: DateTime.parse(item['createdAt']),
+            status: _parseStatus(item['status']),
+            totalAmount: (item['total'] ?? 0).toDouble(),
+            items: orderItems,
+            addressId: item['address'] ?? '',
+          );
+        }).toList();
+
+        // Sort orders by date descending
+        orders.sort((a, b) => b.date.compareTo(a.date));
+        state = orders;
+    } catch (e) {
+      print('Failed to load orders: $e');
     }
   }
 
-  Future<void> _saveOrders(List<Order> orders) async {
-    final prefs = await SharedPreferences.getInstance();
-    final String encodedList = json.encode(orders.map((o) => o.toMap()).toList());
-    await prefs.setString(_storageKey, encodedList);
+  OrderStatus _parseStatus(String? status) {
+    switch (status) {
+      case 'pending':
+        return OrderStatus.pending;
+      case 'confirmed':
+      case 'processing':
+        return OrderStatus.preparing;
+      case 'shipped':
+        return OrderStatus.outForDelivery;
+      case 'delivered':
+      case 'completed':
+        return OrderStatus.delivered;
+      case 'cancelled':
+        return OrderStatus.cancelled;
+      default:
+        return OrderStatus.pending;
+    }
   }
 
   Future<void> placeOrder(List<OrderItem> items, double totalAmount, {String addressId = ''}) async {
-    final now = DateTime.now();
-    final String orderNum = 'NRK${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}${now.millisecondsSinceEpoch.toString().substring(8)}';
-    
-    final newOrder = Order(
-      id: _uuid.v4(),
-      orderNumber: orderNum,
-      date: now,
-      status: OrderStatus.orderPlaced, // New orders start as placed
-      totalAmount: totalAmount,
-      items: items,
-      addressId: addressId,
-    );
+    try {
+      final backendItems = items.map((i) => {
+        'productName': i.product.name,
+        'quantity': i.quantity,
+        'price': i.product.price,
+      }).toList();
 
-    final newState = [newOrder, ...state];
-    state = newState;
-    await _saveOrders(newState);
+      final res = await ApiClient.post('/orders', {
+        'items': backendItems,
+        'total': totalAmount,
+        'address': addressId,
+      });
+
+      // Reload orders after successful placement
+      await _loadOrders();
+    } catch (e) {
+      print('Order error: $e');
+    }
   }
 }
 

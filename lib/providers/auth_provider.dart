@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import '../core/api/api_client.dart';
 
 class AuthState {
   final bool isLoggedIn;
@@ -59,6 +60,13 @@ class AuthNotifier extends Notifier<AuthState> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
+
+      // Register the user as a customer in MongoDB
+      try {
+        await ApiClient.post('/auth/login', {'role': 'customer'});
+      } catch (e) {
+        print('Warning: Failed to register user in MongoDB backend: $e');
+      }
     } catch (e) {
       print('Error during Google Sign-In: $e');
       rethrow;

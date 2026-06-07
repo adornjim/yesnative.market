@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/product.dart';
+import '../core/api/api_client.dart';
 
 final List<Product> _hardcodedProducts = [
   const Product(
@@ -95,8 +96,36 @@ final List<Product> _hardcodedProducts = [
   ),
 ];
 
-final productsProvider = Provider<List<Product>>((ref) {
-  return _hardcodedProducts;
+class ProductsNotifier extends Notifier<List<Product>> {
+  @override
+  List<Product> build() {
+    _fetchProducts();
+    return _hardcodedProducts; // Fallback / initial state while loading
+  }
+
+  Future<void> _fetchProducts() async {
+    try {
+      final data = await ApiClient.get('/products/public');
+      state = (data as List).map((e) => Product(
+        id: e['id'],
+        name: e['name'],
+        price: (e['price'] as num).toDouble(),
+        category: e['category'],
+        rating: (e['rating'] as num).toDouble(),
+        reviews: e['reviews'],
+        benefits: List<String>.from(e['benefits'] ?? []),
+        description: e['description'] ?? '',
+        imageUrl: e['imageUrl'],
+        additionalImages: List<String>.from(e['additionalImages'] ?? []),
+      )).toList();
+    } catch (e) {
+      print('Failed to fetch products: $e');
+    }
+  }
+}
+
+final productsProvider = NotifierProvider<ProductsNotifier, List<Product>>(() {
+  return ProductsNotifier();
 });
 
 final productsByCategoryProvider = Provider.family<List<Product>, String>((ref, category) {
