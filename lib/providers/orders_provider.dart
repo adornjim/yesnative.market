@@ -79,7 +79,15 @@ class OrdersNotifier extends Notifier<List<Order>> {
     }
   }
 
-  Future<void> placeOrder(List<OrderItem> items, double totalAmount, {String addressId = ''}) async {
+  Future<void> placeOrder(
+    List<OrderItem> items, 
+    double totalAmount, 
+    {
+      String address = '',
+      String customerName = '',
+      String customerPhone = '',
+    }
+  ) async {
     try {
       final backendItems = items.map((i) => {
         'productName': i.product.name,
@@ -90,7 +98,9 @@ class OrdersNotifier extends Notifier<List<Order>> {
       final res = await ApiClient.post('/orders', {
         'items': backendItems,
         'total': totalAmount,
-        'address': addressId,
+        'address': address,
+        'customerName': customerName,
+        'customerPhone': customerPhone,
       });
 
       // Reload orders after successful placement

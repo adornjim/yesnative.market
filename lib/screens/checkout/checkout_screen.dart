@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +28,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   final _addressController = TextEditingController();
   final _cityController = TextEditingController();
   final _pincodeController = TextEditingController();
+  final _phoneController = TextEditingController();
   bool _hasInitializedDefaultAddress = false;
 
   @override
@@ -36,6 +37,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     _addressController.dispose();
     _cityController.dispose();
     _pincodeController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -76,7 +78,15 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             final totalAmount = ref.read(cartTotalProvider);
             
             final orderItems = cartItems.map((c) => OrderItem(product: c.product, quantity: c.quantity)).toList();
-            await ref.read(ordersProvider.notifier).placeOrder(orderItems, totalAmount);
+            final fullAddress = '${_addressController.text}, ${_cityController.text} - ${_pincodeController.text}';
+            
+            await ref.read(ordersProvider.notifier).placeOrder(
+              orderItems, 
+              totalAmount,
+              address: fullAddress,
+              customerName: _nameController.text,
+              customerPhone: _phoneController.text,
+            );
             
             setState(() => _isSuccess = true);
             ref.read(cartNotifierProvider.notifier).clearCart();
@@ -232,6 +242,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         TextFormField(
           controller: _nameController,
           decoration: const InputDecoration(labelText: 'Full Name', border: OutlineInputBorder()),
+        ),
+        AppSpacing.gapVmd,
+        TextFormField(
+          controller: _phoneController,
+          decoration: const InputDecoration(labelText: 'Phone Number', border: OutlineInputBorder()),
+          keyboardType: TextInputType.phone,
         ),
         AppSpacing.gapVmd,
         TextFormField(
