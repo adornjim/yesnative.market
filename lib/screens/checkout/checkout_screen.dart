@@ -287,11 +287,37 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildUpiOption('gpay', 'Google Pay', Icons.g_mobiledata),
+                _buildUpiOption(
+                  'gpay', 
+                  'Google Pay', 
+                  RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(text: 'G', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 20)),
+                        TextSpan(text: 'Pay', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600, fontSize: 18)),
+                      ],
+                    ),
+                  )
+                ),
                 const SizedBox(height: 8),
-                _buildUpiOption('phonepe', 'PhonePe', Icons.payments_outlined),
+                _buildUpiOption(
+                  'phonepe', 
+                  'PhonePe', 
+                  const Text('पे', style: TextStyle(color: Color(0xFF5f259f), fontWeight: FontWeight.bold, fontSize: 22))
+                ),
                 const SizedBox(height: 8),
-                _buildUpiOption('paytm', 'Paytm', Icons.account_balance_wallet_outlined),
+                _buildUpiOption(
+                  'paytm', 
+                  'Paytm', 
+                  RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(text: 'Pay', style: TextStyle(color: Color(0xFF002970), fontWeight: FontWeight.w900, fontSize: 16)),
+                        TextSpan(text: 'tm', style: TextStyle(color: Color(0xFF00baf2), fontWeight: FontWeight.w900, fontSize: 16)),
+                      ],
+                    ),
+                  )
+                ),
               ],
             ).animate().fadeIn().slideY(begin: -0.1),
           ),
@@ -316,7 +342,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     ).animate().fadeIn().slideX(begin: 0.1);
   }
 
-  Widget _buildUpiOption(String id, String name, IconData icon) {
+  Widget _buildUpiOption(String id, String name, Widget logoWidget) {
     final isSelected = _selectedUpiApp == id;
     return InkWell(
       onTap: () => setState(() => _selectedUpiApp = id),
@@ -335,14 +361,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           children: [
             Container(
               padding: const EdgeInsets.all(8),
+              width: 50,
+              height: 40,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))
                 ]
               ),
-              child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
+              child: logoWidget,
             ),
             AppSpacing.gapHmd,
             Text(name, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),

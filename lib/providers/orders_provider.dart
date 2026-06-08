@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/order.dart';
 import '../models/product.dart';
@@ -7,10 +9,33 @@ import 'products_provider.dart';
 import '../core/api/api_client.dart';
 
 class OrdersNotifier extends Notifier<List<Order>> {
+  IO.Socket? _socket;
+
   @override
   List<Order> build() {
     _loadOrders();
+    _initSocket();
     return [];
+  }
+
+  void _initSocket() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    _socket = IO.io('http://localhost:3000', IO.OptionBuilder()
+        .setTransports(['websocket'])
+        .enableAutoConnect()
+        .build());
+
+    _socket!.onConnect((_) {
+      print('Connected to Socket.io');
+      _socket!.emit('join_user_room', user.uid);
+    });
+
+    _socket!.on('order_updated', (data) {
+      print('Order updated in real-time: $data');
+      _loadOrders(); // Refresh orders list instantly
+    });
   }
 
   Future<void> _loadOrders() async {
