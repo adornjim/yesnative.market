@@ -14,8 +14,12 @@ void main() async {
   );
 
   // Setup push notifications
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  await NotificationService.initialize();
+  try {
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    await NotificationService.initialize();
+  } catch (e) {
+    print('Push Notification setup failed: $e');
+  }
   
   runApp(
     const ProviderScope(

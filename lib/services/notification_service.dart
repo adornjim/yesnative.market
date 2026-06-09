@@ -9,48 +9,59 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   static Future<void> initialize() async {
-    // 1. Request Permission
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    try {
+      // 1. Request Permission
+      NotificationSettings settings = await _messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted notification permission');
-      
-      // 2. Initialize Local Notifications for foreground messages
-      if (!kIsWeb) {
-        const AndroidInitializationSettings androidSettings =
-            AndroidInitializationSettings('@mipmap/ic_launcher');
-        const InitializationSettings initSettings =
-            InitializationSettings(android: androidSettings);
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        print('User granted notification permission');
         
-        await _localNotificationsPlugin.initialize(
-          settings: initSettings,
-        );
-      }
-
-      // 3. Get FCM Token and send to backend
-      String? token = await _messaging.getToken();
-      if (token != null) {
-        print('FCM Token: $token');
-        _updateTokenOnBackend(token);
-      }
-
-      // 4. Listen for Token Refreshes
-      _messaging.onTokenRefresh.listen((newToken) {
-        _updateTokenOnBackend(newToken);
-      });
-
-      // 5. Handle Foreground Messages
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print('Got a message whilst in the foreground!');
-        
-        if (message.notification != null) {
-          _showLocalNotification(message);
+        // 2. Initialize Local Notifications for foreground messages
+        if (!kIsWeb) {
+          const AndroidInitializationSettings androidSettings =
+              AndroidInitializationSettings('@mipmap/ic_launcher');
+          const InitializationSettings initSettings =
+              InitializationSettings(android: androidSettings);
+          
+          await _localNotificationsPlugin.initialize(
+            settings: initSettings,
+          );
         }
-      });
+
+        // 3. Get FCM Token and send to backend
+        // Note: Web usually requires a vapidKey in getToken()
+        String? token;
+        try {
+          token = await _messaging.getToken();
+        } catch (e) {
+          print('FCM GetToken failed: $e');
+        }
+
+        if (token != null) {
+          print('FCM Token: $token');
+          _updateTokenOnBackend(token);
+        }
+
+        // 4. Listen for Token Refreshes
+        _messaging.onTokenRefresh.listen((newToken) {
+          _updateTokenOnBackend(newToken);
+        });
+
+        // 5. Handle Foreground Messages
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          print('Got a message whilst in the foreground!');
+          
+          if (message.notification != null) {
+            _showLocalNotification(message);
+          }
+        });
+      }
+    } catch (e) {
+      print('Failed to initialize notifications: $e');
     }
   }
 
