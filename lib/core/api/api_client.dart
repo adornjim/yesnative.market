@@ -70,4 +70,23 @@ class ApiClient {
       rethrow;
     }
   }
+
+  static Future<dynamic> put(String endpoint, Map<String, dynamic> body) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl$endpoint'),
+        headers: await _headers,
+        body: json.encode(body),
+      );
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('API Error: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('PUT $endpoint failed: $e');
+      rethrow;
+    }
+  }
 }

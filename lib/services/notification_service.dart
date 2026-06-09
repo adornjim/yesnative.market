@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../core/api/api_client.dart';
@@ -19,12 +20,16 @@ class NotificationService {
       print('User granted notification permission');
       
       // 2. Initialize Local Notifications for foreground messages
-      const AndroidInitializationSettings androidSettings =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
-      const InitializationSettings initSettings =
-          InitializationSettings(android: androidSettings);
-      
-      await _localNotificationsPlugin.initialize(initSettings);
+      if (!kIsWeb) {
+        const AndroidInitializationSettings androidSettings =
+            AndroidInitializationSettings('@mipmap/ic_launcher');
+        const InitializationSettings initSettings =
+            InitializationSettings(android: androidSettings);
+        
+        await _localNotificationsPlugin.initialize(
+          settings: initSettings,
+        );
+      }
 
       // 3. Get FCM Token and send to backend
       String? token = await _messaging.getToken();
@@ -59,6 +64,8 @@ class NotificationService {
   }
 
   static Future<void> _showLocalNotification(RemoteMessage message) async {
+    if (kIsWeb) return;
+    
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'high_importance_channel', // id
       'High Importance Notifications', // title
@@ -69,10 +76,10 @@ class NotificationService {
         NotificationDetails(android: androidDetails);
 
     await _localNotificationsPlugin.show(
-      message.notification.hashCode,
-      message.notification?.title,
-      message.notification?.body,
-      platformDetails,
+      id: message.notification.hashCode,
+      title: message.notification?.title,
+      body: message.notification?.body,
+      notificationDetails: platformDetails,
     );
   }
 }
