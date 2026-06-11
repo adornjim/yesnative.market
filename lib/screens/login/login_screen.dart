@@ -18,6 +18,19 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isLoading = false;
+  bool _isMoved = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          _isMoved = true;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +43,62 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             flex: 4,
             child: SafeArea(
               bottom: false,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Stack(
                 children: [
-                  AppLogo(size: 64, color: Colors.white).animate().fadeIn().scale(),
-                  AppSpacing.gapVmd,
-                  AppSpacing.gapVsm,
-                  const Text(
-                    'Functional Superfoods',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                      letterSpacing: 1.5,
+                  // Marquee of ingredients (fades in when _isMoved is true)
+                  AnimatedOpacity(
+                    opacity: _isMoved ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 800),
+                    curve: Curves.easeIn,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: _isMoved ? const IngredientsMarquee() : const SizedBox(),
                     ),
-                  ).animate().fadeIn(delay: 400.ms).slideY(),
+                  ),
+
+                  // Logo and Text Animation
+                  AnimatedAlign(
+                    duration: const Duration(milliseconds: 800),
+                    curve: Curves.easeInOutCubic,
+                    alignment: _isMoved ? Alignment.topLeft : Alignment.center,
+                    child: Padding(
+                      padding: _isMoved 
+                          ? const EdgeInsets.only(left: 24, top: 16) 
+                          : EdgeInsets.zero,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: _isMoved ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeInOutCubic,
+                            height: _isMoved ? 40 : 80,
+                            child: AppLogo(size: _isMoved ? 40 : 64, color: Colors.white),
+                          ),
+                          AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 400),
+                            crossFadeState: _isMoved ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                            firstChild: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AppSpacing.gapVmd,
+                                AppSpacing.gapVsm,
+                                const Text(
+                                  'Functional Superfoods',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 16,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            secondChild: const SizedBox.shrink(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -133,7 +188,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           : _buildGoogleIcon(),
                       label: Text(
                         _isLoading ? 'Signing in...' : 'Continue with Google',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.black87,
@@ -172,3 +227,54 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return SvgPicture.string(googleLogoSvg, width: 24, height: 24);
   }
 }
+
+class IngredientsMarquee extends StatelessWidget {
+  const IngredientsMarquee({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final images = [
+      'assets/images/almonds_dates.png',
+      'assets/images/black_rice.png',
+      'assets/images/fresh_honey.png',
+      'assets/images/raw_millets.png',
+    ];
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const NeverScrollableScrollPhysics(),
+      child: Row(
+        children: [
+          ...images.map(_buildIngredientCard),
+          ...images.map(_buildIngredientCard),
+          ...images.map(_buildIngredientCard),
+        ],
+      ).animate(onPlay: (controller) => controller.repeat())
+       .slideX(begin: 0, end: -0.3333333, duration: const Duration(seconds: 15)),
+    );
+  }
+
+  Widget _buildIngredientCard(String path) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white10,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        image: DecorationImage(
+          image: AssetImage(path),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+

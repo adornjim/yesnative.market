@@ -14,7 +14,7 @@ class OrdersNotifier extends Notifier<List<Order>> {
   @override
   List<Order> build() {
     _loadOrders();
-    _initSocket();
+    // _initSocket(); // Temporarily disabled to debug white screen
     return [];
   }
 

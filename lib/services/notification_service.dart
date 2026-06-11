@@ -10,6 +10,10 @@ class NotificationService {
 
   static Future<void> initialize() async {
     try {
+      if (kIsWeb) {
+        print('Push notifications are disabled on web to prevent JS crashes.');
+        return;
+      }
       // 1. Request Permission
       NotificationSettings settings = await _messaging.requestPermission(
         alert: true,
