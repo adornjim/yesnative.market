@@ -164,6 +164,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ).animate().fadeIn(delay: 900.ms).slideY(begin: 0.2),
                 ],
               ),
+            ).animate().slideY(
+              begin: 1.0, 
+              end: 0.0, 
+              duration: const Duration(milliseconds: 800), 
+              curve: Curves.easeOutQuart
             ),
           ),
         ],

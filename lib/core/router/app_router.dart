@@ -130,16 +130,9 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/login',
       parentNavigatorKey: _rootNavigatorKey,
-      pageBuilder: (context, state) => CustomTransitionPage(
+      pageBuilder: (context, state) => NoTransitionPage(
         key: state.pageKey,
         child: const LoginScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0.0, 1.0); // Slide up for login
-          const end = Offset.zero;
-          const curve = Curves.easeOutQuart;
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          return SlideTransition(position: animation.drive(tween), child: child);
-        },
       ),
     ),
     GoRoute(
