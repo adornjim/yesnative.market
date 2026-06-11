@@ -32,8 +32,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkOnboarding() async {
-    // Wait for the animation sequence: 1.5s center, 0.5s move, 2.5s show images
-    await Future.delayed(const Duration(milliseconds: 4500));
+    // Wait for the animation sequence: 1.5s center, 0.8s move, then transition
+    await Future.delayed(const Duration(milliseconds: 2500));
     
     if (!mounted) return;
     
@@ -59,44 +59,6 @@ class _SplashScreenState extends State<SplashScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Background ingredient images that fade in after the logo moves
-            if (_moveLogo)
-              Positioned.fill(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 160.0, left: 16, right: 16), // Increased top padding to prevent overlap
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Pure Ingredients.\nReal Wellness.',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.surface,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.3),
-                        const SizedBox(height: 32),
-                        Expanded(
-                          child: GridView.count(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 16,
-                            crossAxisSpacing: 16,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              _buildIngredientImage('assets/images/raw_millets.png', 200),
-                              _buildIngredientImage('assets/images/fresh_honey.png', 400),
-                              _buildIngredientImage('assets/images/almonds_dates.png', 600),
-                              _buildIngredientImage('assets/images/black_rice.png', 800),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
             // The Animated Logo
             AnimatedAlign(
               duration: const Duration(milliseconds: 800),
@@ -119,24 +81,5 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
-  }
-
-  Widget _buildIngredientImage(String assetPath, int delayMs) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          )
-        ],
-        image: DecorationImage(
-          image: AssetImage(assetPath),
-          fit: BoxFit.cover,
-        ),
-      ),
-    ).animate().fadeIn(delay: delayMs.ms, duration: 500.ms).scale(delay: delayMs.ms, curve: Curves.easeOutBack);
   }
 }

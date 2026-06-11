@@ -18,19 +18,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isLoading = false;
-  bool _isMoved = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        setState(() {
-          _isMoved = true;
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,55 +32,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               bottom: false,
               child: Stack(
                 children: [
-                  // Marquee of ingredients (fades in when _isMoved is true)
-                  AnimatedOpacity(
-                    opacity: _isMoved ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 800),
-                    curve: Curves.easeIn,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: _isMoved ? const IngredientsMarquee() : const SizedBox(),
-                    ),
+                  // Marquee of ingredients (always visible)
+                  const Align(
+                    alignment: Alignment.center,
+                    child: IngredientsMarquee(),
                   ),
 
-                  // Logo and Text Animation
-                  AnimatedAlign(
-                    duration: const Duration(milliseconds: 800),
-                    curve: Curves.easeInOutCubic,
-                    alignment: _isMoved ? Alignment.topLeft : Alignment.center,
+                  // Logo at Top Left
+                  Align(
+                    alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: _isMoved 
-                          ? const EdgeInsets.only(left: 24, top: 16) 
-                          : EdgeInsets.zero,
+                      padding: const EdgeInsets.only(left: 24, top: 16),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: _isMoved ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 800),
-                            curve: Curves.easeInOutCubic,
-                            height: _isMoved ? 40 : 80,
-                            child: AppLogo(size: _isMoved ? 40 : 64, color: Colors.white),
-                          ),
-                          AnimatedCrossFade(
-                            duration: const Duration(milliseconds: 400),
-                            crossFadeState: _isMoved ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                            firstChild: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                AppSpacing.gapVmd,
-                                AppSpacing.gapVsm,
-                                const Text(
-                                  'Functional Superfoods',
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 16,
-                                    letterSpacing: 1.5,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            secondChild: const SizedBox.shrink(),
+                          SizedBox(
+                            height: 40,
+                            child: AppLogo(size: 40, color: Colors.white),
                           ),
                         ],
                       ),
