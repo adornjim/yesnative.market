@@ -5,15 +5,15 @@ import 'core/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'providers/theme_provider.dart';
 
-class YesNativeApp extends ConsumerWidget {
-  const YesNativeApp({super.key});
+class NevarkApp extends ConsumerWidget {
+  const NevarkApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(
-      title: 'Yes Native',
+      title: 'Nevark Foods',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

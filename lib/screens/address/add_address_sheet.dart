@@ -117,7 +117,11 @@ class _AddAddressSheetState extends ConsumerState<AddAddressSheet> {
                       controller: _phoneController,
                       decoration: const InputDecoration(labelText: 'Phone Number', border: OutlineInputBorder()),
                       keyboardType: TextInputType.phone,
-                      validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                      validator: (val) {
+                        if (val == null || val.isEmpty) return 'Required';
+                        if (val.length != 10 || int.tryParse(val) == null) return 'Enter a valid 10-digit number';
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -143,7 +147,11 @@ class _AddAddressSheetState extends ConsumerState<AddAddressSheet> {
                     child: TextFormField(
                       controller: _cityController,
                       decoration: const InputDecoration(labelText: 'City', border: OutlineInputBorder()),
-                      validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                      validator: (val) {
+                        if (val == null || val.trim().isEmpty) return 'Required';
+                        if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(val)) return 'Invalid city';
+                        return null;
+                      },
                     ),
                   ),
                   AppSpacing.gapHmd,
@@ -151,7 +159,11 @@ class _AddAddressSheetState extends ConsumerState<AddAddressSheet> {
                     child: TextFormField(
                       controller: _stateController,
                       decoration: const InputDecoration(labelText: 'State', border: OutlineInputBorder()),
-                      validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                      validator: (val) {
+                        if (val == null || val.trim().isEmpty) return 'Required';
+                        if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(val)) return 'Invalid state';
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -162,7 +174,11 @@ class _AddAddressSheetState extends ConsumerState<AddAddressSheet> {
                 controller: _pincodeController,
                 decoration: const InputDecoration(labelText: 'Pincode', border: OutlineInputBorder()),
                 keyboardType: TextInputType.number,
-                validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Required';
+                  if (val.length != 6 || int.tryParse(val) == null) return 'Enter a valid 6-digit pincode';
+                  return null;
+                },
               ),
               AppSpacing.gapVlg,
               

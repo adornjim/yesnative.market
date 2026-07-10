@@ -38,9 +38,11 @@ class HomeScreen extends ConsumerWidget {
           
           // AppBar
           SliverAppBar(
+            primary: false,
+            toolbarHeight: 48,
             backgroundColor: Theme.of(context).colorScheme.surface,
             pinned: true,
-            title: AppLogo(size: 20, color: Theme.of(context).colorScheme.primary),
+            title: const AppLogo(size: 20),
             centerTitle: true,
             actions: [
               IconButton(

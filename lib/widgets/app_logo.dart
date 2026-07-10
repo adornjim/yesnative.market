@@ -12,7 +12,9 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logoColor = color ?? Theme.of(context).colorScheme.primary;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final defaultColor = isDark ? Colors.white : Theme.of(context).colorScheme.primary;
+    final logoColor = color ?? defaultColor;
 
     return Hero(
       tag: 'app_logo',

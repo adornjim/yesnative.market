@@ -6,18 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class ApiClient {
   static String get baseUrl {
-    // If running on web or iOS simulator
-    if (kIsWeb) {
-      return 'http://localhost:3000/api';
-    } 
-    // If running on Android emulator
-    else if (Platform.isAndroid) {
-      // 10.0.2.2 is the special alias to your host loopback interface (localhost) on Android emulator
-      // If you are using a PHYSICAL Android phone, you need to change this to your PC's local IP (e.g. 192.168.1.5:3000)
-      return 'http://10.0.2.2:3000/api';
-    } 
-    // Fallback
-    return 'http://localhost:3000/api';
+    return 'https://nevarkfood-backend.onrender.com/api';
   }
 
   static Future<Map<String, String>> get _headers async {

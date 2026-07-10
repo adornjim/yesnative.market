@@ -19,6 +19,7 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 }
 
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
+  final _formKey = GlobalKey<FormState>();
   int _currentStep = 0;
   bool _isSuccess = false;
   String _selectedPaymentMethod = 'upi';
@@ -73,6 +74,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         type: StepperType.horizontal,
         currentStep: _currentStep,
         onStepContinue: () async {
+          if (_currentStep == 0) {
+            if (_formKey.currentState?.validate() == false) return;
+          }
           if (_currentStep == 2) {
             final cartItems = ref.read(cartNotifierProvider);
             final totalAmount = ref.read(cartTotalProvider);
@@ -151,9 +155,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget _buildShippingForm() {
     final addresses = ref.watch(addressProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+    return Form(
+      key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
         if (addresses.isNotEmpty) ...[
           const Text('Select a Saved Address', style: TextStyle(fontWeight: FontWeight.bold)),
           AppSpacing.gapVsm,
@@ -242,31 +249,49 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         TextFormField(
           controller: _nameController,
           decoration: const InputDecoration(labelText: 'Full Name', border: OutlineInputBorder()),
+          validator: (val) => val == null || val.trim().isEmpty ? 'Required' : null,
         ),
         AppSpacing.gapVmd,
         TextFormField(
           controller: _phoneController,
           decoration: const InputDecoration(labelText: 'Phone Number', border: OutlineInputBorder()),
           keyboardType: TextInputType.phone,
+          validator: (val) {
+            if (val == null || val.trim().isEmpty) return 'Required';
+            if (val.length != 10 || int.tryParse(val) == null) return 'Enter a valid 10-digit number';
+            return null;
+          },
         ),
         AppSpacing.gapVmd,
         TextFormField(
           controller: _addressController,
           decoration: const InputDecoration(labelText: 'Address', border: OutlineInputBorder()),
           maxLines: 3,
+          validator: (val) => val == null || val.trim().isEmpty ? 'Required' : null,
         ),
         AppSpacing.gapVmd,
         TextFormField(
           controller: _cityController,
           decoration: const InputDecoration(labelText: 'City', border: OutlineInputBorder()),
+          validator: (val) {
+            if (val == null || val.trim().isEmpty) return 'Required';
+            if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(val)) return 'Invalid city';
+            return null;
+          },
         ),
         AppSpacing.gapVmd,
         TextFormField(
           controller: _pincodeController,
           decoration: const InputDecoration(labelText: 'Pincode', border: OutlineInputBorder()),
           keyboardType: TextInputType.number,
+          validator: (val) {
+            if (val == null || val.trim().isEmpty) return 'Required';
+            if (val.length != 6 || int.tryParse(val) == null) return 'Enter a valid 6-digit pincode';
+            return null;
+          },
         ),
       ],
+      ),
     ).animate().fadeIn().slideX(begin: 0.1);
   }
 

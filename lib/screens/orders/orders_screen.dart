@@ -30,8 +30,7 @@ class OrdersScreen extends ConsumerWidget {
               children: [
                 TextButton.icon(
                   onPressed: () {
-                    // Refreshes the orders. Since we are using shared preferences and Riverpod, 
-                    // it is automatically kept in sync, but we can re-read if needed.
+                    ref.read(ordersProvider.notifier).refreshOrders();
                   },
                   icon: const Icon(Icons.refresh, size: 18),
                   label: const Text('Refresh orders', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -130,7 +129,7 @@ class OrdersScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'ORDER #${order.orderNumber} • ${dateFormat.format(order.date)}',
+                        'ORDER #${order.orderNumber} • ${dateFormat.format(order.date.toLocal())}',
                         style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
                       ),
                       const SizedBox(height: 12),

@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,19 +10,41 @@ import '../core/api/api_client.dart';
 
 class OrdersNotifier extends Notifier<List<Order>> {
   IO.Socket? _socket;
+  Timer? _pollingTimer;
 
   @override
   List<Order> build() {
     _loadOrders();
-    // _initSocket(); // Temporarily disabled to debug white screen
+    try {
+      _initSocket();
+    } catch (e) {
+      print('Socket init error: $e');
+    }
+
+    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+      _loadOrders();
+    });
+
+    ref.onDispose(() {
+      _pollingTimer?.cancel();
+      if (_socket != null) {
+        _socket!.disconnect();
+        _socket!.dispose();
+      }
+    });
+
     return [];
+  }
+
+  Future<void> refreshOrders() async {
+    await _loadOrders();
   }
 
   void _initSocket() {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
-    _socket = IO.io('http://localhost:3000', IO.OptionBuilder()
+    _socket = IO.io('https://nevarkfood-backend.onrender.com', IO.OptionBuilder()
         .setTransports(['websocket'])
         .enableAutoConnect()
         .build());

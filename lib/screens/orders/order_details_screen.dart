@@ -113,7 +113,7 @@ class OrderDetailsScreen extends ConsumerWidget {
             const SizedBox(height: 4),
             Text('Payment: UPI (Completed)', style: TextStyle(color: Colors.grey.shade600)),
             const SizedBox(height: 16),
-            Text('Order Date: ${dateFormat.format(order.date)}', style: TextStyle(color: Colors.grey.shade600)),
+            Text('Order Date: ${dateFormat.format(order.date.toLocal())}', style: TextStyle(color: Colors.grey.shade600)),
           ],
         ),
       ),

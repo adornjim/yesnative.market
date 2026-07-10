@@ -11,7 +11,7 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('About Yes Native'),
+        title: const Text('About Nevark'),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: SingleChildScrollView(
@@ -38,7 +38,7 @@ class AboutScreen extends StatelessWidget {
                   Text('From Erode to the World', style: Theme.of(context).textTheme.headlineMedium),
                   AppSpacing.gapVmd,
                   const Text(
-                    'Yes Native was born in the heart of Tamil Nadu, surrounded by the rich agricultural heritage of Erode and Gobichettipalayam. We started with a simple vision: to bring back the nutritional wisdom of our ancestors into modern lifestyles.',
+                    'Nevark was born in the heart of Tamil Nadu, surrounded by the rich agricultural heritage of Erode and Gobichettipalayam. We started with a simple vision: to bring back the nutritional wisdom of our ancestors into modern lifestyles.',
                     style: TextStyle(fontSize: 16, height: 1.5),
                   ),
                 ],

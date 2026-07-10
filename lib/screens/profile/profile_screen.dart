@@ -73,7 +73,7 @@ class ProfileScreen extends ConsumerWidget {
                           child: Icon(Icons.person_outline, size: 40, color: Theme.of(context).colorScheme.primary),
                         ),
                         AppSpacing.gapVmd,
-                        Text('Welcome to Yes Native', style: Theme.of(context).textTheme.titleLarge),
+                        Text('Welcome to Nevark', style: Theme.of(context).textTheme.titleLarge),
                         AppSpacing.gapVsm,
                         const Text('Login to access your orders and saved items.', textAlign: TextAlign.center),
                         AppSpacing.gapVlg,

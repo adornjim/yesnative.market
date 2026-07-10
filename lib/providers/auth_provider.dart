@@ -63,7 +63,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
       // Register the user as a customer in MongoDB
       try {
-        await ApiClient.post('/auth/login', {'role': 'customer'});
+        await ApiClient.post('/auth/login', {'role': 'customer'}).timeout(const Duration(seconds: 5));
       } catch (e) {
         print('Warning: Failed to register user in MongoDB backend: $e');
       }
